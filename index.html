@@ -1546,7 +1546,7 @@
                                 const velocitaarl = document.createElement('p');
                                 velocitaarl.innerHTML = `<span>VELOCITÀ:</span> ${item.data.edr_info.velocita_fttc}`;
                                 risultatibox.appendChild(velocitaarl);
-                            } else if (item.data.edr_info.hasOwnProperty('clli_onu')){
+                            } else if (!item.data.edr_info.hasOwnProperty('clli_onu')){
                             }else {
                                 const velocitaarl = document.createElement('p');
                                 velocitaarl.innerHTML = `<span>VELOCITÀ:</span> Upgrade a 200M`;
