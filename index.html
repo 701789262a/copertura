@@ -1512,7 +1512,7 @@
                             //    nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - RIGIDA (${item.data.edr_info.data_apertura_fttc})`;
                             //}
                             console.log(`has clli ${item.data.edr_info.hasOwnProperty('clli_onu')}`)
-                            if (item.data.edr_info.hasOwnProperty('clli_onu')) {
+                            if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Armadio") {
                                 if (item.data.edr_info.data_apertura_fttc != null) {
                                     nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_apertura_fttc})`;
                                 } else {
@@ -1546,7 +1546,7 @@
                                 const velocitaarl = document.createElement('p');
                                 velocitaarl.innerHTML = `<span>VELOCITÀ:</span> ${item.data.edr_info.velocita_fttc}`;
                                 risultatibox.appendChild(velocitaarl);
-                            } else if (!item.data.edr_info.hasOwnProperty('clli_onu')){
+                            } else if (!item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Area di Centrale"){
                             }else {
                                 const velocitaarl = document.createElement('p');
                                 velocitaarl.innerHTML = `<span>VELOCITÀ:</span> Upgrade a 200M`;
