@@ -1511,12 +1511,16 @@
                             //if (item.data.edr_info.clli_onu == undefined){
                             //    nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - RIGIDA (${item.data.edr_info.data_apertura_fttc})`;
                             //}
-                            if (item.data.edr_info.data_apertura_fttc != null) {
-                                nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_apertura_fttc})`;
-                            } else {
-                                nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_pianificazione_fttc})`;
+                            if (!item.data.edr_info.clli_onu == undefined) {
+                                if (item.data.edr_info.data_apertura_fttc != null) {
+                                    nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_apertura_fttc})`;
+                                } else {
+                                    nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_pianificazione_fttc})`;
+                                }
+                            }else{
+                                nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - RIGIDA (${item.data.edr_info.data_apertura_fttc})`;
+
                             }
-                            
                             //if (item.data.edr_info.data_apertura_fttc != null) {
                             //    nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_apertura_fttc})`;
                             //} else {
