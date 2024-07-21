@@ -1336,6 +1336,11 @@
                         risultatibox.className = 'risultatibox';
 
                         const titoloFTTC = document.createElement('div');
+                        if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Armadio") {
+                            var tipoFMR = "FTTC"
+                        }else{
+                            var tipoFMR = "FTTE"
+                        }
                         titoloFTTC.innerHTML = `<p class="sottotitolo2">FTTC</p>`;
                         risultatibox.appendChild(titoloFTTC);
 
