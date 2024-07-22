@@ -576,7 +576,7 @@
                 <h3>FTTH</h3>
                 <ul>
                     <li><b>RFC:</b> Presente collegamento fino a PTE</li>
-                    <li><b>RFA:</b> Presente collegamento verticale degli appartamenti></li>
+                    <li><b>RFA:</b> Presente collegamento verticale degli appartamenti</li>
                 </ul>
                 <ul>
                     <li><span class="stato-101 legendastati">101</span> - PRE-RFC - Rete in Lavorazione, non ancora
@@ -1336,11 +1336,17 @@
                         risultatibox.className = 'risultatibox';
 
                         const titoloFTTC = document.createElement('div');
-                        if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Armadio") {
+                        if (item.data.hasOwnProperty('edr_info')){
+                            if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Armadio") {
                             var tipoFMR = "FTTC"
                         }else{
                             var tipoFMR = "FTTE"
                         }
+                        }else{
+                            var tipoFMR = "FTTC"
+
+                        }
+                        
                         titoloFTTC.innerHTML = `<p class="sottotitolo2">${tipoFMR}</p>`;
                         risultatibox.appendChild(titoloFTTC);
 
@@ -1630,7 +1636,8 @@
                         }
 
                         const certcoord = document.createElement('p');
-                        certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${ogg.data.edr_info.certificazione_coordinate} `;
+                        certificazione = {true:'Si', false:'No'}
+                        certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[ogg.data.edr_info.certificazione_coordinate]} `;
                         risultatibox.appendChild(certcoord);
 
                         if (ogg.data.edr_info.note != "") {
