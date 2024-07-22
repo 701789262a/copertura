@@ -1548,7 +1548,7 @@
                             if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Armadio") {
 
 
-                                indirizzoarl.innerHTML = `<span>INDIRIZZO:</span> ${item.data.edr_info.particella} ${item.data.edr_info.via.replace('->','')}, ${item.data.edr_info.civico} - ${item.data.edr_info.comune} (${item.data.edr_info.provincia})`;
+                                indirizzoarl.innerHTML = `<span>INDIRIZZO:</span> <a href="https://maps.google.com/?q=${item.data.edr_info.particella} ${item.data.edr_info.via.replace('->','')}, ${item.data.edr_info.civico}" target="_blank">${item.data.edr_info.particella} ${item.data.edr_info.via.replace('->','')}, ${item.data.edr_info.civico} - ${item.data.edr_info.comune} (${item.data.edr_info.provincia})</a>`;
                             }
                             risultatibox.appendChild(indirizzoarl);
                             console.log(item.data.maxspeed)
@@ -1614,7 +1614,7 @@
                         risultatibox.appendChild(coordinatecentr);
 
                         const indirizzocentr = document.createElement('p');
-                        indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  ${ogg.data.edr_info.indirizzo} - ${ogg.data.edr_info.comune} (${ogg.data.edr_info.provincia} - ${ogg.data.edr_info.regione})`;
+                        indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  <a href="https://maps.google.com/?q=${ogg.data.edr_info.indirizzo.replace('->','')} - ${ogg.data.edr_info.comune}" target="_blank"> ${ogg.data.edr_info.indirizzo.replace('->','')} - ${ogg.data.edr_info.comune} (${ogg.data.edr_info.provincia} - ${ogg.data.edr_info.regione})</a>`;
                         risultatibox.appendChild(indirizzocentr);
 
                         const aperturaadsl = document.createElement('p');
@@ -1673,7 +1673,7 @@
                             risultatibox.appendChild(coordinatecentr);
 
                             const indirizzocentr = document.createElement('p');
-                            indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  ${item4.data.edr_info.indirizzo} - ${item4.data.edr_info.comune} (${item4.data.edr_info.provincia} - ${item4.data.edr_info.regione})`;
+                            indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  <a href ="https://maps.google.com/?q=${item4.data.edr_info.indirizzo.replace('->','')} ${item4.data.edr_info.comune}" target="_blank"> ${item4.data.edr_info.indirizzo.replace('->','')} - ${item4.data.edr_info.comune} (${item4.data.edr_info.provincia} - ${item4.data.edr_info.regione})</a>`;
                             risultatibox.appendChild(indirizzocentr);
 
                             const aperturaadsl = document.createElement('p');
@@ -1695,7 +1695,7 @@
                             }
 
                             const certcoord = document.createElement('p');
-                            certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${item4.data.edr_info.certificazione_coordinate} `;
+                            certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[item4.data.edr_info.certificazione_coordinate]} `;
                             risultatibox.appendChild(certcoord);
 
                             if (item4.data.edr_info.note != "") {
