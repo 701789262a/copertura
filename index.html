@@ -1312,7 +1312,7 @@
                             }
                             console.log(INDIRIZZO)
                             const CLLI = document.createElement('p');
-                            CLLI.innerHTML = `<span>CENTRALE: </span> ${item.data.edr_info.nome} - <a href="https://www.google.com/maps/place/${item.data.edr_info.lat},${item.data.edr_info.lng}" target="_blank">${item.data.edr}</a> - <a href="https://maps.google.com/?q=${INDIRIZZO} ${item.data.edr_info.comune}" target="_blank">${item.data.edr_info.codice_acl_area}</a>`;
+                            CLLI.innerHTML = `<span>CENTRALE: </span> ${item.data.edr_info.nome_sede_gat} - <a href="https://www.google.com/maps/place/${item.data.edr_info.lat},${item.data.edr_info.lng}" target="_blank">${item.data.edr}</a> - <a href="https://maps.google.com/?q=${INDIRIZZO} ${item.data.edr_info.comune}" target="_blank">${item.data.edr_info.codice_acl_area}</a>`;
                             risultatibox.appendChild(CLLI);
 
                             const PON = document.createElement('p');
