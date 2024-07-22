@@ -1548,7 +1548,7 @@
                             if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Armadio") {
 
 
-                                indirizzoarl.innerHTML = `<span>INDIRIZZO:</span> ${item.data.edr_info.particella} ${item.data.edr_info.via}, ${item.data.edr_info.civico} - ${item.data.edr_info.comune} (${item.data.edr_info.provincia})`;
+                                indirizzoarl.innerHTML = `<span>INDIRIZZO:</span> ${item.data.edr_info.particella} ${item.data.edr_info.via.replace('->','')}, ${item.data.edr_info.civico} - ${item.data.edr_info.comune} (${item.data.edr_info.provincia})`;
                             }
                             risultatibox.appendChild(indirizzoarl);
                             console.log(item.data.maxspeed)
