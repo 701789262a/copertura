@@ -67,6 +67,17 @@
             color: white;
         }
 
+        .tastofc {
+            background-color: rgb(45, 81, 189);
+            border-radius: 10px;
+            font-size: Medium;
+            width: 75%;
+            display: block;
+            margin: 15px auto auto auto;
+            font-family: Poppins;
+            color: white;
+        }
+
         .divider {
             margin-top: 25px;
             margin-bottom: 25px;
@@ -120,6 +131,24 @@
             border-radius: 20px;
         }
 
+        .geocode {
+            margin-top: 20px;
+            font-weight: bold;
+            background-color: #8848ff;
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .geocode-result {
+            margin-top: 10px;
+            border: 1px solid #a48dce;
+            background-color: #d0b6ff;
+            margin-bottom: 50px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 20px;
+        }
+    
         .rame {
             margin-top: 20px;
             font-weight: bold;
@@ -559,8 +588,12 @@
 
         <div class="form-group" id="verifica-group" style="display: none;">
             <button class="tasto" onclick="verificaCopertura()">Verifica Copertura</button>
+            <button class="tastofc" onclick="vicinanzefc()">Ricerca Civici coperti da FiberCop nelle vicinanze</button>
         </div>
         <hr class="divider">
+
+        <div class="geocode">Geolocalizzazione Civico</div>
+        <div class="geocode-result" id="geocode-result"></div>
 
         <div class="consultazioni">Consultazioni 2021</div>
         <div class="consultazioni-result" id="consultazioni-result"></div>
@@ -669,6 +702,8 @@
                 </tbody>
             </table>
 
+            
+
         </div>
 
 
@@ -755,6 +790,9 @@
                         const edrDiv = document.getElementById('edr_interno');
                         edrDiv.innerHTML = '';
 
+                        const geocodeDiv = document.getElementById('geocode-result');
+                        geocodeDiv.innerHTML = '';
+
                         const arcolinkDiv = document.getElementById('arcolink-result');
                         arcolinkDiv.innerHTML = '';
                         document.getElementById('arcolinktable').getElementsByTagName('tbody')[0].innerHTML = '';
@@ -818,6 +856,9 @@
 
                         const eoloDiv = document.getElementById('eolo-result');
                         eoloDiv.innerHTML = '';
+
+                        const geocodeDiv = document.getElementById('geocode-result');
+                        geocodeDiv.innerHTML = '';
 
                         const rameDiv = document.getElementById('rame-result');
                         rameDiv.innerHTML = '';
@@ -891,6 +932,9 @@
 
                 const consultazioniDiv = document.getElementById('consultazioni-result');
                 consultazioniDiv.innerHTML = '';
+
+                const geocodeDiv = document.getElementById('geocode-result');
+                geocodeDiv.innerHTML = '';
 
                 const eoloDiv = document.getElementById('eolo-result');
                 eoloDiv.innerHTML = '';
@@ -981,13 +1025,15 @@
                 const coperturaDiv = document.getElementById('copertura-result');
                 coperturaDiv.innerHTML = '';
                 console.log(data)
+                var openfiberData
                 try {
-                    const openFiberData = data.filter(item => item.channel === "OpenFiber");
+                    openFiberData = data.filter(item => item.channel === "OpenFiber");
                     if (openFiberData.length > 0) {
                         const updateDate = openFiberData[0].UPDATE_DATE.split('T')[0].split('-').reverse().join('/');
                         const coperturaHeader = document.querySelector('.copertura');
                         coperturaHeader.innerHTML = `Copertura Open Fiber ( Dati aggiornati al: ${updateDate})`;
                         var scalaCounter = 0;
+                        var formattedCoordinates
                         openFiberData.forEach(item => {
                             const risultatibox = document.createElement('div');
                             risultatibox.className = 'risultatibox';
@@ -1022,7 +1068,7 @@
                             risultatibox.appendChild(pop);
 
                             const coordinate = document.createElement('p');
-                            const formattedCoordinates = item.COORDINATE_BUILDING.replace('N', '').replace('E', '').replace('_', ', ');
+                            formattedCoordinates = item.COORDINATE_BUILDING.replace('N', '').replace('E', '').replace('_', ', ');
                             coordinate.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${formattedCoordinates}" target="_blank">${formattedCoordinates}</a>`;
                             risultatibox.appendChild(coordinate);
 
@@ -1060,6 +1106,7 @@
                                 x.style.display = "block";
                             }
                         });
+                        geocodingof(formattedCoordinates)
                     } else {
                         const risultatibox = document.createElement('div');
                         risultatibox.className = 'risultatibox';
@@ -1067,6 +1114,7 @@
                         avviso.innerHTML = `<p style="margin-bottom:15px; font-weight:italic">Nessuna copertura FTTH OF trovata per questo indirizzo.</p>`;
                         risultatibox.appendChild(avviso);
                         coperturaDiv.appendChild(risultatibox);
+                        geocoding()
                     }
                 }
                 catch (TypeError) {
@@ -1200,7 +1248,8 @@
                         <td>${tecnologia}</td>
                         <td>${dataItem.data_attivazione}</td>
                         <td>${dataItem.elevation}m</td>`;
-                            tableGBody.appendChild(row);
+                        tableGBody.appendChild(row);
+
                         });
                     })
 
@@ -1336,17 +1385,17 @@
                         risultatibox.className = 'risultatibox';
 
                         const titoloFTTC = document.createElement('div');
-                        if (item.data.hasOwnProperty('edr_info')){
-                            if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Armadio") {
-                            var tipoFMR = "FTTC"
-                        }else{
-                            var tipoFMR = "FTTE"
-                        }
-                        }else{
+                        if (item.data.hasOwnProperty('edr_info')) {
+                            if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr == "Armadio") {
+                                var tipoFMR = "FTTC"
+                            } else {
+                                var tipoFMR = "FTTE"
+                            }
+                        } else {
                             var tipoFMR = "FTTC"
 
                         }
-                        
+
                         titoloFTTC.innerHTML = `<p class="sottotitolo2">${tipoFMR}</p>`;
                         risultatibox.appendChild(titoloFTTC);
 
@@ -1523,13 +1572,13 @@
                             //    nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - RIGIDA (${item.data.edr_info.data_apertura_fttc})`;
                             //}
                             console.log(`has clli ${item.data.edr_info.hasOwnProperty('clli_onu')}`)
-                            if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Armadio") {
+                            if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr == "Armadio") {
                                 if (item.data.edr_info.data_apertura_fttc != null) {
                                     nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_apertura_fttc})`;
                                 } else {
                                     nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_pianificazione_fttc})`;
                                 }
-                            }else{
+                            } else {
                                 nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - RIGIDA (${item.data.edr_info.data_apertura_fttc})`;
 
                             }
@@ -1545,10 +1594,10 @@
                             risultatibox.appendChild(coordinatearl);
 
                             const indirizzoarl = document.createElement('p');
-                            if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Armadio") {
+                            if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr == "Armadio") {
 
 
-                                indirizzoarl.innerHTML = `<span>INDIRIZZO:</span> <a href="https://maps.google.com/?q=${item.data.edr_info.particella} ${item.data.edr_info.via.replace('->',' ')}, ${item.data.edr_info.civico}" target="_blank">${item.data.edr_info.particella} ${item.data.edr_info.via.replace('->',' ')}, ${item.data.edr_info.civico} - ${item.data.edr_info.comune} (${item.data.edr_info.provincia})</a>`;
+                                indirizzoarl.innerHTML = `<span>INDIRIZZO:</span> <a href="https://maps.google.com/?q=${item.data.edr_info.particella} ${item.data.edr_info.via.replace('->', ',')}, ${item.data.edr_info.civico}" target="_blank">${item.data.edr_info.particella} ${item.data.edr_info.via.replace('->', '')}, ${item.data.edr_info.civico} - ${item.data.edr_info.comune} (${item.data.edr_info.provincia})</a>`;
                             }
                             risultatibox.appendChild(indirizzoarl);
                             console.log(item.data.maxspeed)
@@ -1557,8 +1606,8 @@
                                 const velocitaarl = document.createElement('p');
                                 velocitaarl.innerHTML = `<span>VELOCITÀ:</span> ${item.data.edr_info.velocita_fttc}`;
                                 risultatibox.appendChild(velocitaarl);
-                            } else if (!item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr =="Area di Centrale"){
-                            }else {
+                            } else if (!item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr == "Area di Centrale") {
+                            } else {
                                 const velocitaarl = document.createElement('p');
                                 velocitaarl.innerHTML = `<span>VELOCITÀ:</span> Upgrade a 200M`;
                                 risultatibox.appendChild(velocitaarl);
@@ -1590,6 +1639,9 @@
                                         if (item3.status === "ATTIVO" || item3.status === "SATURO") {
                                             dati = ethdata
                                             ogg = item3
+                                        } else {
+                                            dati = null
+                                            console.log("no copertura rame, dati:", dati)
                                         }
                                     })
                                 }
@@ -1597,64 +1649,71 @@
                         }
                     });
 
-                    dati.forEach(ogg => {
-                        const risultatibox = document.createElement('div');
-                        risultatibox.className = 'risultatibox';
+                    if (dati != null) {
+                        dati.forEach(ogg => {
+                            const risultatibox = document.createElement('div');
+                            risultatibox.className = 'risultatibox';
 
-                        const titolocentr = document.createElement('div');
-                        titolocentr.innerHTML = `<p class="sottotitolo2">CENTRALE</p>`;
-                        risultatibox.appendChild(titolocentr);
+                            const titolocentr = document.createElement('div');
+                            titolocentr.innerHTML = `<p class="sottotitolo2">CENTRALE</p>`;
+                            risultatibox.appendChild(titolocentr);
 
-                        const nomecentr = document.createElement('p');
-                        nomecentr.innerHTML = `<span>NOME:</span> ${ogg.data.edr_info.nome_sede_gat} - ${ogg.data.edr_info.codice_clli} - ${ogg.data.edr_info.codice_acl_area}`;
-                        risultatibox.appendChild(nomecentr);
+                            const nomecentr = document.createElement('p');
+                            nomecentr.innerHTML = `<span>NOME:</span> ${ogg.data.edr_info.nome_sede_gat} - ${ogg.data.edr_info.codice_clli} - ${ogg.data.edr_info.codice_acl_area}`;
+                            risultatibox.appendChild(nomecentr);
 
-                        const coordinatecentr = document.createElement('p');
-                        coordinatecentr.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${ogg.data.edr_info.lat},${ogg.data.edr_info.lng}" target="_blank">${ogg.data.edr_info.lat},${ogg.data.edr_info.lng}</a>`;
-                        risultatibox.appendChild(coordinatecentr);
+                            const coordinatecentr = document.createElement('p');
+                            coordinatecentr.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${ogg.data.edr_info.lat},${ogg.data.edr_info.lng}" target="_blank">${ogg.data.edr_info.lat},${ogg.data.edr_info.lng}</a>`;
+                            risultatibox.appendChild(coordinatecentr);
 
-                        const indirizzocentr = document.createElement('p');
-                        indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  <a href="https://maps.google.com/?q=${ogg.data.edr_info.indirizzo.replace('->','')} - ${ogg.data.edr_info.comune}" target="_blank"> ${ogg.data.edr_info.indirizzo.replace('->',' ')} - ${ogg.data.edr_info.comune} (${ogg.data.edr_info.provincia} - ${ogg.data.edr_info.regione})</a>`;
-                        risultatibox.appendChild(indirizzocentr);
+                            const indirizzocentr = document.createElement('p');
+                            indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  <a href="https://maps.google.com/?q=${ogg.data.edr_info.indirizzo.replace('->', ',')} - ${ogg.data.edr_info.comune}" target="_blank"> ${ogg.data.edr_info.indirizzo.replace('->', ',')} - ${ogg.data.edr_info.comune} (${ogg.data.edr_info.provincia} - ${ogg.data.edr_info.regione})</a>`;
+                            risultatibox.appendChild(indirizzocentr);
 
-                        const aperturaadsl = document.createElement('p');
-                        aperturaadsl.innerHTML = `<span>APERTURA ADSL_ETH:</span> ${ogg.data.edr_info.data_apertura_adsl_eth} `;
-                        risultatibox.appendChild(aperturaadsl);
+                            const aperturaadsl = document.createElement('p');
+                            aperturaadsl.innerHTML = `<span>APERTURA ADSL_ETH:</span> ${ogg.data.edr_info.data_apertura_adsl_eth} `;
+                            risultatibox.appendChild(aperturaadsl);
 
-                        if (ogg.data.edr_info.data_apertura_fttc != null) {
-                            const datafttc = document.createElement('p');
-                            datafttc.innerHTML = `<span>APERTURA FTTC:</span> ${ogg.data.edr_info.data_apertura_fttc} `;
-                            risultatibox.appendChild(datafttc);
-                        } else if (ogg.data.edr_info.data_pianificazione_fttc != null) {
-                            const datafttc = document.createElement('p');
-                            datafttc.innerHTML = `<span>APERTURA FTTC:</span> ${ogg.data.edr_info.data_pianificazione_fttc} `;
-                            risultatibox.appendChild(datafttc);
-                        } else {
-                            const datafttc = document.createElement('p');
-                            datafttc.innerHTML = `<span>APERTURA FTTC:</span> Non presente nè pianificata `;
-                            risultatibox.appendChild(datafttc);
-                        }
+                            if (ogg.data.edr_info.data_apertura_fttc != null) {
+                                const datafttc = document.createElement('p');
+                                datafttc.innerHTML = `<span>APERTURA FTTC:</span> ${ogg.data.edr_info.data_apertura_fttc} `;
+                                risultatibox.appendChild(datafttc);
+                            } else if (ogg.data.edr_info.data_pianificazione_fttc != null) {
+                                const datafttc = document.createElement('p');
+                                datafttc.innerHTML = `<span>PIANIFICAZIONE FTTC:</span> ${ogg.data.edr_info.data_pianificazione_fttc} `;
+                                risultatibox.appendChild(datafttc);
+                            } else {
+                                const datafttc = document.createElement('p');
+                                datafttc.innerHTML = `<span>FTTC:</span> Non presente nè pianificata `;
+                                risultatibox.appendChild(datafttc);
+                            }
 
-                        const certcoord = document.createElement('p');
-                        certificazione = {true:'Si', false:'No'}
-                        certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[ogg.data.edr_info.certificazione_coordinate]} `;
-                        risultatibox.appendChild(certcoord);
+                            const certcoord = document.createElement('p');
+                            certificazione = { true: 'Si', false: 'No' }
+                            certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[ogg.data.edr_info.certificazione_coordinate]} `;
+                            risultatibox.appendChild(certcoord);
 
-                        if (ogg.data.edr_info.note != "") {
-                            const dismiss = document.createElement('p');
-                            dismiss.innerHTML = `<span>IN DISMISSIONE:</span> ${ogg.data.edr_info.in_dismissione} `;
-                            risultatibox.appendChild(dismiss);
-                            const notecentr = document.createElement('p');
-                            notecentr.innerHTML = `<span>NOTE:</span> ${ogg.data.edr_info.note} `;
-                            risultatibox.appendChild(notecentr);
-                        } else { }
+                            if (ogg.data.edr_info.note != "") {
+                                const dismiss = document.createElement('p');
+                                dismiss.innerHTML = `<span>IN DISMISSIONE:</span> ${ogg.data.edr_info.in_dismissione} `;
+                                risultatibox.appendChild(dismiss);
+                                const notecentr = document.createElement('p');
+                                notecentr.innerHTML = `<span>NOTE:</span> ${ogg.data.edr_info.note} `;
+                                risultatibox.appendChild(notecentr);
+                            } else { }
 
-                        edrDiv.appendChild(risultatibox);
-                    });
+                            edrDiv.appendChild(risultatibox);
+                        });
+                    }
                     console.log("conclusa parte rame")
                     p2pData.forEach(item4 => {
-                        console.log("la olt è", item4.data.edr_info.codice_clli)
-                        if (item4.data.edr_info.codice_clli != ogg.data.edr_info.codice_clli) {
+                        let centrale_rame
+                        if (dati == null) {
+                            centrale_rame === "aa"
+                        } else {
+                            centrale_rame == ogg.data.edr_info.codice_clli
+                        }
+                        if (item4.data.edr_info.codice_clli != centrale_rame) {
                             console.log("centrali diverse, la olt è", item4.data.edr_info.codice_clli)
 
                             const risultatibox = document.createElement('div');
@@ -1673,7 +1732,7 @@
                             risultatibox.appendChild(coordinatecentr);
 
                             const indirizzocentr = document.createElement('p');
-                            indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  <a href ="https://maps.google.com/?q=${item4.data.edr_info.indirizzo.replace('->','')} ${item4.data.edr_info.comune}" target="_blank"> ${item4.data.edr_info.indirizzo.replace('->',' ')} - ${item4.data.edr_info.comune} (${item4.data.edr_info.provincia} - ${item4.data.edr_info.regione})</a>`;
+                            indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  <a href ="https://maps.google.com/?q=${item4.data.edr_info.indirizzo.replace('->', ',')} ${item4.data.edr_info.comune}" target="_blank"> ${item4.data.edr_info.indirizzo.replace('->', ',')} - ${item4.data.edr_info.comune} (${item4.data.edr_info.provincia} - ${item4.data.edr_info.regione})</a>`;
                             risultatibox.appendChild(indirizzocentr);
 
                             const aperturaadsl = document.createElement('p');
@@ -1686,16 +1745,16 @@
                                 risultatibox.appendChild(datafttc);
                             } else if (item4.data.edr_info.data_pianificazione_fttc != null) {
                                 const datafttc = document.createElement('p');
-                                datafttc.innerHTML = `<span>APERTURA FTTC:</span> ${item4.data.edr_info.data_pianificazione_fttc} `;
+                                datafttc.innerHTML = `<span>PIANIFICAZIONE FTTC:</span> ${item4.data.edr_info.data_pianificazione_fttc} `;
                                 risultatibox.appendChild(datafttc);
                             } else {
                                 const datafttc = document.createElement('p');
-                                datafttc.innerHTML = `<span>APERTURA FTTC:</span> Non presente nè pianificata `;
+                                datafttc.innerHTML = `<span>FTTC:</span> Non presente nè pianificata `;
                                 risultatibox.appendChild(datafttc);
                             }
 
                             const certcoord = document.createElement('p');
-                            certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[item4.data.edr_info.certificazione_coordinate]} `;
+                            certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${item4.data.edr_info.certificazione_coordinate} `;
                             risultatibox.appendChild(certcoord);
 
                             if (item4.data.edr_info.note != "") {
@@ -1799,6 +1858,78 @@
                     risultatibox.appendChild(peakSpeed);
                 }
                 consultazioniDiv.appendChild(risultatibox);
+            }
+            var coordinatefc;
+            async function geocoding() {
+                try {
+                    
+                            comune_geo = document.getElementById("comune").value;
+                            indirizzo_geo = document.getElementById("indirizzo").value;
+                            civico_geo = document.getElementById("civico").options[document.getElementById("civico").selectedIndex].text;
+                            const georequest = await fetch(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=pjson&outFields=Addr_type&forStorage=false&SingleLine=${indirizzo_geo} ${civico_geo} ${comune_geo}`);
+                            const geoData = await georequest.json();
+                            console.log(geoData)
+
+                            const geocodeDiv = document.getElementById('geocode-result');
+                            geocodeDiv.innerHTML = '';
+
+                            const risultatibox = document.createElement('div');
+                            risultatibox.className = 'risultatibox';
+
+                            coordinate = document.createElement('p');
+                            coordinate.innerHTML = `<b>Coordinate: </b><a href="https://www.google.com/maps/place/${geoData.candidates[0].location.y},${geoData.candidates[0].location.x}" target="_blank">${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}</a>`;
+                            risultatibox.appendChild(coordinate);
+
+                            addrtype = document.createElement('p');
+                            addrtype.innerHTML = `<b>Address Type: </b> ${geoData.candidates[0].attributes.Addr_type}`;
+                            addrtype.innerHTML += `<span class="color-g stato-scala">${geoData.candidates[0].score}</p>`;
+                            risultatibox.appendChild(addrtype);
+
+                            coordinatefc = `${geoData.candidates[0].location.y}|${geoData.candidates[0].location.x}`
+        
+                            geocodeDiv.appendChild(risultatibox);
+                        }
+                 catch (TypeError) {
+                    console.log("ERRORE", TypeError)
+                }
+            }
+
+            async function geocodingof(formattedCoordinates) {
+                console.log("aaaaaaaaaa", formattedCoordinates)
+                try {
+
+                    const geocodeDiv = document.getElementById('geocode-result');
+                    geocodeDiv.innerHTML = '';
+
+                    const risultatibox = document.createElement('div');
+                    risultatibox.className = 'risultatibox';
+
+                    coordinate = document.createElement('p');
+                    coordinate.innerHTML = `<b>Coordinate: </b><a href="https://www.google.com/maps/place/${formattedCoordinates}" target="_blank">${formattedCoordinates}</a>`;
+                    risultatibox.appendChild(coordinate);
+
+                    geocodeDiv.appendChild(risultatibox);
+                    coordinatefc = formattedCoordinates.replace(', ', '|')
+                }
+                catch (TypeError) {
+                    console.log("ERRORE", TypeError)
+                }
+            }
+        
+            async function vicinanzefc() {
+                console.log("coord fc: ", coordinatefc)
+                const vicinanzeof = await fetch('https://coperturaapi.zeromist.net/fibercop', {
+                    method: 'POST',
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+                    },
+                    body: new URLSearchParams({
+                        action: "search_neighbor_coverage",
+                        coords: coordinatefc
+                    })
+                });
+                const vicinanzedata = await vicinanzeof.json();
+                console.log(vicinanzedata)
             }
 
         </script>
