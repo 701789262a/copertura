@@ -271,7 +271,6 @@
         .tablemetri {
             width: 70px;
         }
-
         .tablemetri {
             width: 60px;
         }
@@ -588,6 +587,8 @@
 
         <div class="form-group" id="verifica-group" style="display: none;">
             <button class="tasto" onclick="verificaCopertura()">Verifica Copertura</button>
+        </div>
+        <div class="form-group" id="verificafc-group" style="display: none;">
             <button class="tastofc" onclick="vicinanzefc()">Ricerca Civici coperti da FiberCop nelle vicinanze</button>
         </div>
         <hr class="divider">
@@ -768,6 +769,7 @@
                         document.getElementById('civico-id').textContent = '';
                         document.getElementById('civico-group').style.display = 'none';
                         document.getElementById('verifica-group').style.display = 'none';
+                        document.getElementById('verificafc-group').style.display = 'none';
 
                         const fastwebDiv = document.getElementById('fastweb-result');
                         fastwebDiv.innerHTML = '';
@@ -792,6 +794,8 @@
 
                         const geocodeDiv = document.getElementById('geocode-result');
                         geocodeDiv.innerHTML = '';
+
+                        document.getElementById('verificafc-group').style.display = 'none';
 
                         const arcolinkDiv = document.getElementById('arcolink-result');
                         arcolinkDiv.innerHTML = '';
@@ -868,6 +872,8 @@
 
                         const fibercopDiv = document.getElementById('fibercop-result');
                         fibercopDiv.innerHTML = '';
+
+                        document.getElementById('verificafc-group').style.display = 'none';
 
                         const consultazioniDiv = document.getElementById('consultazioni-result');
                         consultazioniDiv.innerHTML = '';
@@ -966,13 +972,16 @@
                 const civicoSelect = document.getElementById('civico');
                 console.log(civicoSelect)
 
+                document.getElementById('verificafc-group').style.display = 'none';
+
                 civicoId = civicoSelect.value;
                 console.log(civicoId)
                 document.getElementById('civico-id').textContent = civicoId;
 
             }
-
+            var dataItem
             async function verificaCopertura() {
+                document.getElementById('verificafc-group').style.display = 'block';
 
                 const responsetoken = await fetch('https://coperturaapi.zeromist.net/token', { // codice per ricevere il token API di fiber-map (che cambia ogni 3h)
                     method: 'GET',
@@ -1024,7 +1033,6 @@
 
                 const coperturaDiv = document.getElementById('copertura-result');
                 coperturaDiv.innerHTML = '';
-                console.log(data)
                 var openfiberData
                 try {
                     openFiberData = data.filter(item => item.channel === "OpenFiber");
@@ -1108,16 +1116,18 @@
                         });
                         geocodingof(formattedCoordinates)
                     } else {
+                        geocoding()
                         const risultatibox = document.createElement('div');
                         risultatibox.className = 'risultatibox';
                         const avviso = document.createElement('div');
                         avviso.innerHTML = `<p style="margin-bottom:15px; font-weight:italic">Nessuna copertura FTTH OF trovata per questo indirizzo.</p>`;
                         risultatibox.appendChild(avviso);
                         coperturaDiv.appendChild(risultatibox);
-                        geocoding()
+                        
                     }
                 }
                 catch (TypeError) {
+                    geocoding()
                     const risultatibox = document.createElement('div');
                     risultatibox.className = 'risultatibox';
                     const avviso = document.createElement('div');
@@ -1228,6 +1238,7 @@
                         item2.data.forEach(dataItem => {
                             distanzam = Math.round(dataItem.distance);
                             const row = document.createElement("tr");
+                            const row2 = document.createElement("tr");
                             if (dataItem.tech_string == "EOLOwave + EOLOwaveG") {
                                 tecnologia = "Ew + EwG"
                             } else if (dataItem.tech_string == "EOLOwave") {
@@ -1242,13 +1253,16 @@
                                 tecnologia = "Ew + Ew2 + EwG"
                             }
                             row.innerHTML = `
-                        <td>${dataItem.id}</td>
-                        <td><a href="https://www.google.com/maps/place/${dataItem.lat},${dataItem.lng}" target="_blank">${dataItem.nome}</a></td>
-                        <td>${distanzam}m</td>
-                        <td>${tecnologia}</td>
-                        <td>${dataItem.data_attivazione}</td>
-                        <td>${dataItem.elevation}m</td>`;
+                            <td onclick="mostradati(${dataItem.id})">${dataItem.id}</td>
+                            <td><a href="https://www.google.com/maps/place/${dataItem.lat},${dataItem.lng}" target="_blank">${dataItem.nome}</a></td>
+                            <td>${distanzam}m</td>
+                            <td>${tecnologia}</td>
+                            <td>${dataItem.data_attivazione}</td>
+                            <td>${dataItem.elevation}m</td>`
+                            row2.innerHTML = `
+                            <td colspan="6" class="dati_aggiuntivi" id="${dataItem.id}" style="display:none;"><b>Tilt:</b> ${dataItem.tilt}         <b>Segnale (18):</b>  ${dataItem.expected_signal_18}         <b>Segnale (24):</b>  ${dataItem.expected_signal_24}         <b>Azimuth</b> ${dataItem.azimuth}</td>`
                         tableGBody.appendChild(row);
+                        tableGBody.appendChild(row2);
 
                         });
                     })
@@ -1257,6 +1271,7 @@
                         item.data.forEach(dataItem => {
                             distanzam = Math.round(dataItem.distance);
                             const row = document.createElement("tr");
+                            const row2 = document.createElement("tr");
                             if (dataItem.tech_string == "EOLOwave + EOLOwaveG") {
                                 tecnologia = "Ew + EwG"
                             } else if (dataItem.tech_string == "EOLOwave") {
@@ -1271,13 +1286,16 @@
                                 tecnologia = "Ew + Ew2 + EwG"
                             }
                             row.innerHTML = `
-                        <td>${dataItem.id}</td>
-                        <td><a href="https://www.google.com/maps/place/${dataItem.lat},${dataItem.lng}" target="_blank">${dataItem.nome}</a></td>
-                        <td>${distanzam}m</td>
-                        <td>${tecnologia}</td>
-                        <td>${dataItem.data_attivazione}</td>
-                        <td>${dataItem.elevation}m</td>`;
+                            <td onclick="mostradati(${dataItem.id})">${dataItem.id}</td>
+                            <td><a href="https://www.google.com/maps/place/${dataItem.lat},${dataItem.lng}" target="_blank">${dataItem.nome}</a></td>
+                            <td>${distanzam}m</td>
+                            <td>${tecnologia}</td>
+                            <td>${dataItem.data_attivazione}</td>
+                            <td>${dataItem.elevation}m</td>`
+                            row2.innerHTML = `
+                            <td colspan="6" class="dati_aggiuntivi" id="${dataItem.id}" style="display:none;"><b>Tilt:</b> ${dataItem.tilt}         <b>Segnale (18):</b>  ${dataItem.expected_signal_18}         <b>Segnale (24):</b>  ${dataItem.expected_signal_24}         <b>Azimuth</b> ${dataItem.azimuth}</td>`
                             tableBody.appendChild(row);
+                            tableBody.appendChild(row2);
                         });
                     })
                     eoloDiv.appendChild(risultatibox);
@@ -1359,7 +1377,6 @@
                             } else {
                                 INDIRIZZO = `${item.data.edr_info.indirizzo}`
                             }
-                            console.log(INDIRIZZO)
                             const CLLI = document.createElement('p');
                             CLLI.innerHTML = `<span>CENTRALE: </span> ${item.data.edr_info.nome_sede_gat} - <a href="https://www.google.com/maps/place/${item.data.edr_info.lat},${item.data.edr_info.lng}" target="_blank">${item.data.edr}</a> - <a href="https://maps.google.com/?q=${INDIRIZZO} ${item.data.edr_info.comune}" target="_blank">${item.data.edr_info.codice_acl_area}</a>`;
                             risultatibox.appendChild(CLLI);
@@ -1566,12 +1583,10 @@
                             const titoloARL = document.createElement('div');
                             titoloARL.innerHTML = `<p class="sottotitolo">ARL</p>`;
                             risultatibox.appendChild(titoloARL);
-                            console.log(`rigida ${item.data.edr_info.clli_onu} ${item.data.edr_info.data_apertura_fttc}`)
                             const nomearl = document.createElement('p');
                             //if (item.data.edr_info.clli_onu == undefined){
                             //    nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - RIGIDA (${item.data.edr_info.data_apertura_fttc})`;
                             //}
-                            console.log(`has clli ${item.data.edr_info.hasOwnProperty('clli_onu')}`)
                             if (item.data.edr_info.hasOwnProperty('clli_onu') && item.data.tipo_edr == "Armadio") {
                                 if (item.data.edr_info.data_apertura_fttc != null) {
                                     nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_apertura_fttc})`;
@@ -1600,8 +1615,6 @@
                                 indirizzoarl.innerHTML = `<span>INDIRIZZO:</span> <a href="https://maps.google.com/?q=${item.data.edr_info.particella} ${item.data.edr_info.via.replace('->', ',')}, ${item.data.edr_info.civico}" target="_blank">${item.data.edr_info.particella} ${item.data.edr_info.via.replace('->', '')}, ${item.data.edr_info.civico} - ${item.data.edr_info.comune} (${item.data.edr_info.provincia})</a>`;
                             }
                             risultatibox.appendChild(indirizzoarl);
-                            console.log(item.data.maxspeed)
-                            console.log(item.data.edr_info.velocita_fttc)
                             if (item.data.maxspeed == item.data.edr_info.velocita_fttc) {
                                 const velocitaarl = document.createElement('p');
                                 velocitaarl.innerHTML = `<span>VELOCITÀ:</span> ${item.data.edr_info.velocita_fttc}`;
@@ -1648,6 +1661,7 @@
                             })
                         }
                     });
+                    var centrale_rame
 
                     if (dati != null) {
                         dati.forEach(ogg => {
@@ -1703,16 +1717,16 @@
                             } else { }
 
                             edrDiv.appendChild(risultatibox);
+
+                            if (dati == null) {
+                                centrale_rame === "aa"
+                            } else {
+                                centrale_rame = ogg.data.edr_info.codice_clli
+                            }
                         });
                     }
                     console.log("conclusa parte rame")
                     p2pData.forEach(item4 => {
-                        let centrale_rame
-                        if (dati == null) {
-                            centrale_rame === "aa"
-                        } else {
-                            centrale_rame == ogg.data.edr_info.codice_clli
-                        }
                         if (item4.data.edr_info.codice_clli != centrale_rame) {
                             console.log("centrali diverse, la olt è", item4.data.edr_info.codice_clli)
 
@@ -1754,7 +1768,8 @@
                             }
 
                             const certcoord = document.createElement('p');
-                            certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[item4.data.edr_info.certificazione_coordinate]} `;
+                            certificazione = { true: 'Si', false: 'No' }
+                            certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[ogg.data.edr_info.certificazione_coordinate]} `;
                             risultatibox.appendChild(certcoord);
 
                             if (item4.data.edr_info.note != "") {
@@ -1860,15 +1875,16 @@
                 consultazioniDiv.appendChild(risultatibox);
             }
             var coordinatefc;
+
             async function geocoding() {
+                console.log("geocode civico standard")
                 try {
-                    
                             comune_geo = document.getElementById("comune").value;
                             indirizzo_geo = document.getElementById("indirizzo").value;
                             civico_geo = document.getElementById("civico").options[document.getElementById("civico").selectedIndex].text;
                             const georequest = await fetch(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=pjson&outFields=Addr_type&forStorage=false&SingleLine=${indirizzo_geo} ${civico_geo} ${comune_geo}`);
                             const geoData = await georequest.json();
-                            console.log(geoData)
+                            console.log("coord: ", geoData)
 
                             const geocodeDiv = document.getElementById('geocode-result');
                             geocodeDiv.innerHTML = '';
@@ -1895,7 +1911,7 @@
             }
 
             async function geocodingof(formattedCoordinates) {
-                console.log("aaaaaaaaaa", formattedCoordinates)
+                console.log("geocod of: ", formattedCoordinates)
                 try {
 
                     const geocodeDiv = document.getElementById('geocode-result');
@@ -1931,7 +1947,16 @@
                 const vicinanzedata = await vicinanzeof.json();
                 console.log(vicinanzedata)
             }
-
+            
+            async function mostradati(id) {
+                var riganascosta = document.getElementById(id);
+                if (riganascosta.style.display === "none") {
+                    riganascosta.style.display = "table-cell";
+                } else {
+                    riganascosta.style.display = "none";
+                }
+            }
+            
         </script>
 </body>
 
