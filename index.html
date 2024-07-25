@@ -1190,7 +1190,7 @@
                                 prevendibilita = "PCN NON RILEGATO";
                             }
                             const prevend = document.createElement('p');
-                            prevend.innerHTML = `<span>ATTENZIONE: </span><p class="stato-105">${prevendibilita}</p>`;
+                            prevend.innerHTML = `<span>ATTENZIONE: </span><span class="stato-105">${prevendibilita}</span>`;
                             risultatibox.appendChild(prevend);
 
                             coperturaDiv.appendChild(risultatibox);
@@ -1818,11 +1818,11 @@
                         const titolocentr = document.createElement('div');
                         titolocentr.innerHTML = `<p class="sottotitolo2">CENTRALE</p>`;
                         risultatibox.appendChild(titolocentr);
-
                         
                         const avviso = document.createElement('p');
                         avviso.innerHTML = `Non riesco a recuperare i dati sulla centrale`;
                         risultatibox.appendChild(avviso);
+                        edrDiv.appendChild(risultatibox);
                     }
                     console.log("conclusa parte rame")
                     if (p2pData != null) {
