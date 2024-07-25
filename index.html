@@ -7,7 +7,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=256&id=Y6AAeSVIcpWt&format=png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <title>Verifica Copertura Fibra Ottica</title>
     <style>
         body {
@@ -337,11 +339,11 @@
         }
 
         .stato-scala {
-            margin-left: 50px;
+            margin-left: 20px;
             display: inline-block;
             padding: 2px 5px;
             color: white;
-            margin-right: 50px;
+            margin-right: 20px;
         }
 
         .legendastati {
@@ -1068,6 +1070,8 @@
                 const coperturaDiv = document.getElementById('copertura-result');
                 coperturaDiv.innerHTML = '';
                 var openfiberData
+                const prevenData = datafibermap.filter(item => item.carrier === "openfiber" && item.technology === "FTTH" && item.status === "ATTIVO");
+                console.log("prevendata: ", prevenData)
                 try {
                     console.log("inizio of")
                     if (data.recordFound == null) {
@@ -1156,8 +1160,41 @@
                         } else {
                             geocoding()
                             const coperturaDiv = document.getElementById('copertura-result');
-                            coperturaDiv.innerHTML = 'Nessuna copertura FTTH OF trovata per questo indirizzo.';
+                            coperturaDiv.innerHTML = 'AAA Nessuna copertura FTTH OF trovata per questo indirizzo.';
                         }
+                    } else if (prevenData.length > 0) {
+                        geocoding()
+                        console.log("dati of di fiber-map: ", prevenData)
+                        prevenData.forEach(item => {
+                            const risultatibox = document.createElement('div');
+                            risultatibox.className = 'risultatibox';
+
+                            const titoloftth = document.createElement('div');
+                            titoloftth.innerHTML = `<b class="sottotitolo">Civico Coperto da FTTH</b>`;
+                            risultatibox.appendChild(titoloftth);
+
+                            const idBuilding = document.createElement('p');
+                            idBuilding.innerHTML = `<span>ID BUILDING:</span> ${item.data.id_building}`;
+                            idBuilding.innerHTML += ` <span class="stato-${item.data.stato_palazzo} stato-scala">${item.data.stato_palazzo}</span>`;
+                            if (item.data.tag === "CLUSTER-CD") {
+                                cluster = "C_D"
+                                clusterclass = "cluster-CD"
+                            }
+                            idBuilding.innerHTML += ` <span class="${clusterclass} stato-scala">${cluster}</span>`;
+                            risultatibox.appendChild(idBuilding);
+
+                            const pop = document.createElement('p');
+                            pop.innerHTML = `<span>POP/PCN:</span> ${item.data.edr}`;
+                            risultatibox.appendChild(pop);
+                            if (item.data.notices != null) {
+                                prevendibilita = "PCN NON RILEGATO";
+                            }
+                            const prevend = document.createElement('p');
+                            prevend.innerHTML = `<span>ATTENZIONE: </span><p class="stato-105">${prevendibilita}</p>`;
+                            risultatibox.appendChild(prevend);
+
+                            coperturaDiv.appendChild(risultatibox);
+                        });
                     } else {
                         geocoding()
                         const coperturaDiv = document.getElementById('copertura-result');
@@ -1192,7 +1229,7 @@
                             const statoColorClass2 = `stato-${item.data.stato_palazzo}`;
                             idbuilding.innerHTML = `<span>ID BUILDING:</span> ${item.data.id_building}`;
                             if (item.data.stato_palazzo) {
-                                idbuilding.innerHTML += ` <span class="${statoColorClass2} stato-scala">${item.data.stato_palazzo}</span>`;
+                                idbuilding.innerHTML += ` <span class="stato-${statoColorClass2} stato-scala">${item.data.stato_palazzo}</span>`;
                             }
                             risultatibox.appendChild(idbuilding);
 
@@ -1713,7 +1750,7 @@
                     });
                     var centrale_rame
 
-                    if (dati != null) {
+                    if (dati != null && ogg != null) {
                         dati.forEach(ogg => {
                             const risultatibox = document.createElement('div');
                             risultatibox.className = 'risultatibox';
@@ -1774,6 +1811,18 @@
                                 centrale_rame = ogg.data.edr_info.codice_clli
                             }
                         });
+                    } else{
+                        const risultatibox = document.createElement('div');
+                        risultatibox.className = 'risultatibox';
+
+                        const titolocentr = document.createElement('div');
+                        titolocentr.innerHTML = `<p class="sottotitolo2">CENTRALE</p>`;
+                        risultatibox.appendChild(titolocentr);
+
+                        
+                        const avviso = document.createElement('p');
+                        avviso.innerHTML = `Non riesco a recuperare i dati sulla centrale`;
+                        risultatibox.appendChild(avviso);
                     }
                     console.log("conclusa parte rame")
                     if (p2pData != null) {
@@ -1820,7 +1869,7 @@
 
                                 const certcoord = document.createElement('p');
                                 certificazione = { true: 'Si', false: 'No' }
-                                certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[ogg.data.edr_info.certificazione_coordinate]} `;
+                                certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[item4.data.edr_info.certificazione_coordinate]} `;
                                 risultatibox.appendChild(certcoord);
 
                                 if (item4.data.edr_info.note != "") {
@@ -2002,7 +2051,7 @@
                 console.log(vicinanzedata)
 
                 document.getElementById("adiacenze").style.display = "block"
-                
+
                 const adiacenzeDiv = document.getElementById("adiacenze")
 
                 const risultatibox = document.createElement('div');
@@ -2014,7 +2063,7 @@
 
                 adiacenzeDiv.appendChild(risultatibox);
 
-                if (vicinanzedata.length > 0) {           
+                if (vicinanzedata.length > 0) {
                     document.getElementById("adiacenzetable").style.display = "block"
 
                     const tableBody = document.querySelector("#adiacenzetable tbody");
