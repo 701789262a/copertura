@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=256&id=Y6AAeSVIcpWt&format=png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <title>Verifica Copertura Fibra Ottica</title>
     <style>
         body {
@@ -40,7 +39,7 @@
         }
 
         h1 {
-            margin-top: 40px;
+            margin-top: 39px;
         }
 
         button {
@@ -148,7 +147,7 @@
             padding: 10px 10px 10px 10px;
             border-radius: 20px;
         }
-    
+
         .rame {
             margin-top: 20px;
             font-weight: bold;
@@ -251,6 +250,20 @@
             display: none;
         }
 
+        .adiacenze {
+            margin-top: 10px;
+            border: 1px solid #859ac7;
+            background-color: #b4ccff;
+            margin-bottom: 10px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 20px;
+            display: none;
+        }
+
+        .adiacenzetable {
+            display: none;
+        }
+
         .eolotable {
             margin-top: 10px;
             padding: 10px;
@@ -271,6 +284,7 @@
         .tablemetri {
             width: 70px;
         }
+
         .tablemetri {
             width: 60px;
         }
@@ -451,6 +465,14 @@
             background-color: rgb(255, 196, 107);
             display: inline-block;
             padding: 2px 5px;
+        }
+
+        .statocivico-DISPONIBILE {
+            background-color: rgb(29, 163, 47);
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            text-align: center;
         }
 
         .stato-101 {
@@ -703,7 +725,20 @@
                 </tbody>
             </table>
 
-            
+            <div class="adiacenze" id="adiacenze">
+                <table class="adiacenzetable" id="adiacenzetable">
+                    <thead>
+                        <tr>
+                            <th>Civico</th>
+                            <th>Distanza</th>
+                            <th>Stato</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
 
         </div>
 
@@ -981,7 +1016,6 @@
             }
             var dataItem
             async function verificaCopertura() {
-                document.getElementById('verificafc-group').style.display = 'block';
 
                 const responsetoken = await fetch('https://coperturaapi.zeromist.net/token', { // codice per ricevere il token API di fiber-map (che cambia ogni 3h)
                     method: 'GET',
@@ -1030,108 +1064,114 @@
                     }),
                 });
                 const data = await response.json();
-
+                console.log(data)
                 const coperturaDiv = document.getElementById('copertura-result');
                 coperturaDiv.innerHTML = '';
                 var openfiberData
                 try {
-                    openFiberData = data.filter(item => item.channel === "OpenFiber");
-                    if (openFiberData.length > 0) {
-                        const updateDate = openFiberData[0].UPDATE_DATE.split('T')[0].split('-').reverse().join('/');
-                        const coperturaHeader = document.querySelector('.copertura');
-                        coperturaHeader.innerHTML = `Copertura Open Fiber ( Dati aggiornati al: ${updateDate})`;
-                        var scalaCounter = 0;
-                        var formattedCoordinates
-                        openFiberData.forEach(item => {
-                            const risultatibox = document.createElement('div');
-                            risultatibox.className = 'risultatibox';
+                    console.log("inizio of")
+                    if (data.recordFound == null) {
+                        console.log("dati virgin presenti: ", data)
+                        openFiberData = data.filter(item => item.channel === "OpenFiber");
+                        console.log("ofdata: ", openFiberData)
+                        if (openFiberData.length > 0) {
+                            const updateDate = openFiberData[0].UPDATE_DATE.split('T')[0].split('-').reverse().join('/');
+                            const coperturaHeader = document.querySelector('.copertura');
+                            coperturaHeader.innerHTML = `Copertura Open Fiber ( Dati aggiornati al: ${updateDate})`;
+                            var scalaCounter = 0;
+                            var formattedCoordinates
+                            openFiberData.forEach(item => {
+                                const risultatibox = document.createElement('div');
+                                risultatibox.className = 'risultatibox';
 
-                            const titoloftth = document.createElement('div');
-                            titoloftth.innerHTML = `<b class="sottotitolo">Civico Coperto da FTTH</b>`;
-                            risultatibox.appendChild(titoloftth);
+                                const titoloftth = document.createElement('div');
+                                titoloftth.innerHTML = `<b class="sottotitolo">Civico Coperto da FTTH</b>`;
+                                risultatibox.appendChild(titoloftth);
 
-                            const scalaHeader = document.createElement('div');
-                            const statoScalaColorClass = `stato-${item.STATO_SCALA_PALAZZINA}`;
-                            const clusterIdColorClass = item.clusterId === 'A_B' || item.clusterId === 'AGF' ? 'cluster-AB' : (item.clusterId === 'C_D' ? 'cluster-CD' : '');
-                            if (item.SCALA_PALAZZINA == undefined) {
-                                nome_palazzina = "ASSENTE"
-                            } else {
-                                nome_palazzina = item.SCALA_PALAZZINA
-                            }
-                            scalaHeader.innerHTML = `<b>SCALA_PALAZZINA</b>: ${nome_palazzina}`;
-                            if (item.STATO_SCALA_PALAZZINA) {
-                                scalaHeader.innerHTML += ` <span class="${statoScalaColorClass} stato-scala">${item.STATO_SCALA_PALAZZINA}</span>`;
-                            }
-                            if (item.clusterId) {
-                                scalaHeader.innerHTML += ` <span class="${clusterIdColorClass} cluster-id">${item.clusterId}</span>`;
-                            }
-                            risultatibox.appendChild(scalaHeader);
+                                const scalaHeader = document.createElement('div');
+                                const statoScalaColorClass = `stato-${item.STATO_SCALA_PALAZZINA}`;
+                                const clusterIdColorClass = item.clusterId === 'A_B' || item.clusterId === 'AGF' ? 'cluster-AB' : (item.clusterId === 'C_D' ? 'cluster-CD' : '');
+                                if (item.SCALA_PALAZZINA == undefined) {
+                                    nome_palazzina = "ASSENTE"
+                                } else {
+                                    nome_palazzina = item.SCALA_PALAZZINA
+                                }
+                                scalaHeader.innerHTML = `<b>SCALA_PALAZZINA</b>: ${nome_palazzina}`;
+                                if (item.STATO_SCALA_PALAZZINA) {
+                                    scalaHeader.innerHTML += ` <span class="${statoScalaColorClass} stato-scala">${item.STATO_SCALA_PALAZZINA}</span>`;
+                                }
+                                if (item.clusterId) {
+                                    scalaHeader.innerHTML += ` <span class="${clusterIdColorClass} cluster-id">${item.clusterId}</span>`;
+                                }
+                                risultatibox.appendChild(scalaHeader);
 
-                            const idScala = document.createElement('p');
-                            idScala.innerHTML = `<span>ID_SCALA:</span> ${item.ID_SCALA}`;
-                            risultatibox.appendChild(idScala);
+                                const idScala = document.createElement('p');
+                                idScala.innerHTML = `<span>ID_SCALA:</span> ${item.ID_SCALA}`;
+                                risultatibox.appendChild(idScala);
 
-                            const pop = document.createElement('p');
-                            pop.innerHTML = `<span>POP/PCN:</span> ${item.POP}`;
-                            risultatibox.appendChild(pop);
+                                const pop = document.createElement('p');
+                                pop.innerHTML = `<span>POP/PCN:</span> ${item.POP}`;
+                                risultatibox.appendChild(pop);
 
-                            const coordinate = document.createElement('p');
-                            formattedCoordinates = item.COORDINATE_BUILDING.replace('N', '').replace('E', '').replace('_', ', ');
-                            coordinate.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${formattedCoordinates}" target="_blank">${formattedCoordinates}</a>`;
-                            risultatibox.appendChild(coordinate);
+                                const coordinate = document.createElement('p');
+                                formattedCoordinates = item.COORDINATE_BUILDING.replace('N', '').replace('E', '').replace('_', ', ');
+                                coordinate.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${formattedCoordinates}" target="_blank">${formattedCoordinates}</a>`;
+                                risultatibox.appendChild(coordinate);
 
-                            if (item.DATA_ULTIMA_MODIFICA_RECORD) {
-                                const ultimaModifica = document.createElement('p');
-                                const formattedUltimaModifica = item.DATA_ULTIMA_MODIFICA_RECORD.split('T')[0].split('-').reverse().join('/');
-                                ultimaModifica.innerHTML = `<span>DATA_ULTIMA_MODIFICA_RECORD:</span> ${formattedUltimaModifica}`;
-                                risultatibox.appendChild(ultimaModifica);
-                            }
+                                if (item.DATA_ULTIMA_MODIFICA_RECORD) {
+                                    const ultimaModifica = document.createElement('p');
+                                    const formattedUltimaModifica = item.DATA_ULTIMA_MODIFICA_RECORD.split('T')[0].split('-').reverse().join('/');
+                                    ultimaModifica.innerHTML = `<span>DATA_ULTIMA_MODIFICA_RECORD:</span> ${formattedUltimaModifica}`;
+                                    risultatibox.appendChild(ultimaModifica);
+                                }
 
-                            const insertDate = document.createElement('p');
-                            const formattedInsertDate = item.INSERT_DATE.split('T')[0].split('-').reverse().join('/');
-                            insertDate.innerHTML = `<span>INSERT_DATE:</span> ${formattedInsertDate}`;
-                            risultatibox.appendChild(insertDate);
+                                const insertDate = document.createElement('p');
+                                const formattedInsertDate = item.INSERT_DATE.split('T')[0].split('-').reverse().join('/');
+                                insertDate.innerHTML = `<span>INSERT_DATE:</span> ${formattedInsertDate}`;
+                                risultatibox.appendChild(insertDate);
 
-                            const totaleUi = document.createElement('p');
-                            totaleUi.innerHTML = `<span>TOTALE_UI:</span> ${item.TOTALE_UI}`;
-                            risultatibox.appendChild(totaleUi);
+                                const totaleUi = document.createElement('p');
+                                totaleUi.innerHTML = `<span>TOTALE_UI:</span> ${item.TOTALE_UI}`;
+                                risultatibox.appendChild(totaleUi);
 
-                            const xgsPon = document.createElement('p');
-                            xgsPon.innerHTML = `<span>XGS-PON:</span> <span class="${item.tenGbpsSpeed ? 'yes' : 'no'}">${item.tenGbpsSpeed ? 'Si' : 'No'}</span>`;
+                                const xgsPon = document.createElement('p');
+                                xgsPon.innerHTML = `<span>XGS-PON:</span> <span class="${item.tenGbpsSpeed ? 'yes' : 'no'}">${item.tenGbpsSpeed ? 'Si' : 'No'}</span>`;
 
-                            if (scalaCounter < openFiberData.length - 1) {
-                                xgsPon.innerHTML += `<hr style="margin-top:10px">`
-                            }
-                            risultatibox.appendChild(xgsPon);
+                                if (scalaCounter < openFiberData.length - 1) {
+                                    xgsPon.innerHTML += `<hr style="margin-top:10px">`
+                                }
+                                risultatibox.appendChild(xgsPon);
 
-                            coperturaDiv.appendChild(risultatibox);
-                            scalaCounter = scalaCounter + 1;
+                                coperturaDiv.appendChild(risultatibox);
+                                scalaCounter = scalaCounter + 1;
 
-                            var x = document.getElementById('statiOF');
-                            if (x.style.display === "block") {
-                                x.style.display = "none";
-                            } else {
-                                x.style.display = "block";
-                            }
-                        });
-                        geocodingof(formattedCoordinates)
+                                var x = document.getElementById('statiOF');
+                                if (x.style.display === "block") {
+                                    x.style.display = "none";
+                                } else {
+                                    x.style.display = "block";
+                                }
+                            });
+                            geocodingof(formattedCoordinates)
+                        } else {
+                            geocoding()
+                            const coperturaDiv = document.getElementById('copertura-result');
+                            coperturaDiv.innerHTML = 'Nessuna copertura FTTH OF trovata per questo indirizzo.';
+                        }
                     } else {
                         geocoding()
-                        const risultatibox = document.createElement('div');
-                        risultatibox.className = 'risultatibox';
-                        const avviso = document.createElement('div');
-                        avviso.innerHTML = `<p style="margin-bottom:15px; font-weight:italic">Nessuna copertura FTTH OF trovata per questo indirizzo.</p>`;
-                        risultatibox.appendChild(avviso);
-                        coperturaDiv.appendChild(risultatibox);
-                        
+                        const coperturaDiv = document.getElementById('copertura-result');
+                        coperturaDiv.innerHTML = 'Nessuna copertura FTTH OF trovata per questo indirizzo.';
                     }
-                }
-                catch (TypeError) {
+
+
+                } catch (TypeError) {
+                    console.log(TypeError)
                     geocoding()
                     const risultatibox = document.createElement('div');
                     risultatibox.className = 'risultatibox';
                     const avviso = document.createElement('div');
-                    avviso.innerHTML = `<p style="margin-bottom:15px; font-weight:italic">Nessuna copertura FTTH OF trovata per questo indirizzo.</p>`;
+                    avviso.innerHTML = `<p style="margin-bottom:15px; font-weight:italic">ERRORE nella copertura OpenFiber</p>`;
                     risultatibox.appendChild(avviso);
                     coperturaDiv.appendChild(risultatibox);
                 }
@@ -1261,8 +1301,8 @@
                             <td>${dataItem.elevation}m</td>`
                             row2.innerHTML = `
                             <td colspan="6" class="dati_aggiuntivi" id="${dataItem.id}" style="display:none;"><b>Tilt:</b> ${dataItem.tilt}         <b>Segnale (18):</b>  ${dataItem.expected_signal_18}         <b>Segnale (24):</b>  ${dataItem.expected_signal_24}         <b>Azimuth</b> ${dataItem.azimuth}</td>`
-                        tableGBody.appendChild(row);
-                        tableGBody.appendChild(row2);
+                            tableGBody.appendChild(row);
+                            tableGBody.appendChild(row2);
 
                         });
                     })
@@ -1310,41 +1350,46 @@
                 try {
                     const fastwebDiv = document.getElementById('fastweb-result');
                     fastwebDiv.innerHTML = '';
+                    if (data.recordFound == null) {
+                        const fastwebData = data.filter(item => item.channel === "Fastweb");
+                        if (fastwebData.length > 0) {
 
-                    const fastwebData = data.filter(item => item.channel === "Fastweb");
-                    if (fastwebData.length > 0) {
+                            fastwebData.forEach(item => {
+                                const risultatibox = document.createElement('div');
+                                risultatibox.className = 'risultatibox';
 
-                        fastwebData.forEach(item => {
-                            const risultatibox = document.createElement('div');
-                            risultatibox.className = 'risultatibox';
+                                const statoTecnico = document.createElement('p');
+                                statoTecnico.innerHTML = `<span>STATO TECNICO:</span> <p class="stato-${item.STATO_TECNICO_GPON}">${item.STATO_TECNICO_GPON}</p>`;
+                                risultatibox.appendChild(statoTecnico);
 
-                            const statoTecnico = document.createElement('p');
-                            statoTecnico.innerHTML = `<span>STATO TECNICO:</span> <p class="stato-${item.STATO_TECNICO_GPON}">${item.STATO_TECNICO_GPON}</p>`;
-                            risultatibox.appendChild(statoTecnico);
+                                const statoVendibilita = document.createElement('p');
+                                statoVendibilita.innerHTML = `<span>STATO VENDIBILITÀ:</span> <p class="stato-${item.STATO_VENDIBILITA_GPON}">${item.STATO_VENDIBILITA_GPON}</p>`;
+                                risultatibox.appendChild(statoVendibilita);
 
-                            const statoVendibilita = document.createElement('p');
-                            statoVendibilita.innerHTML = `<span>STATO VENDIBILITÀ:</span> <p class="stato-${item.STATO_VENDIBILITA_GPON}">${item.STATO_VENDIBILITA_GPON}</p>`;
-                            risultatibox.appendChild(statoVendibilita);
-
-                            if (item.PREVISIONE_AMPLIAMENTO_GPON === null) {
-                                const statoAmpliamento = document.createElement('p');
-                                statoAmpliamento.innerHTML = `<span>STATO AMPLIAMENTO GPON: </span> null`;
-                                risultatibox.appendChild(statoAmpliamento);
-                            } else {
-                                const statoAmpliamento = document.createElement('p');
-                                statoAmpliamento.innerHTML = `<span>STATO AMPLIAMENTO GPON: </span>  ${item.STATO_AMPLIAMENTO_GPON}`;
-                                risultatibox.appendChild(statoAmpliamento);
-                            }
-                            fastwebDiv.appendChild(risultatibox);
-                        });
+                                if (item.PREVISIONE_AMPLIAMENTO_GPON === null) {
+                                    const statoAmpliamento = document.createElement('p');
+                                    statoAmpliamento.innerHTML = `<span>STATO AMPLIAMENTO GPON: </span> null`;
+                                    risultatibox.appendChild(statoAmpliamento);
+                                } else {
+                                    const statoAmpliamento = document.createElement('p');
+                                    statoAmpliamento.innerHTML = `<span>STATO AMPLIAMENTO GPON: </span>  ${item.STATO_AMPLIAMENTO_GPON}`;
+                                    risultatibox.appendChild(statoAmpliamento);
+                                }
+                                fastwebDiv.appendChild(risultatibox);
+                            });
+                        } else {
+                            const fastwebDiv = document.getElementById('fastweb-result');
+                            fastwebDiv.innerHTML = 'Nessuna copertura FiberCop VULA trovata per questo indirizzo.';
+                        }
                     } else {
                         const fastwebDiv = document.getElementById('fastweb-result');
                         fastwebDiv.innerHTML = 'Nessuna copertura FiberCop VULA trovata per questo indirizzo.';
                     }
                 } catch (TypeError) {
                     const fastwebDiv = document.getElementById('fastweb-result');
-                    fastwebDiv.innerHTML = 'Nessuna copertura FiberCop VULA trovata per questo indirizzo.';
+                    fastwebDiv.innerHTML = 'ERRORE Nessuna copertura FiberCop VULA trovata per questo indirizzo.';
                 }
+
                 // INIZIO FIBERCOP
                 const fibercopDiv = document.getElementById('fibercop-result');
                 fibercopDiv.innerHTML = '';
@@ -1630,10 +1675,14 @@
                         }
                     });
 
-                    const adslData = datafibermap.filter(item => item.carrier === "tim" && item.technology === "ASIM_ETH");
-                    const atmData = datafibermap.filter(item2 => item2.carrier === "tim" && item2.technology === "SIM_ATM_BOND");
-                    const ethData = datafibermap.filter(item3 => item3.carrier === "tim" && item3.technology === "SIM_ETH");
-                    const p2pData = datafibermap.filter(item4 => item4.carrier === "tim" && item4.technology === "FIBRA_P2P");
+                    let adslData
+                    let atmData
+                    let ethData
+                    let p2pData
+                    adslData = datafibermap.filter(item => item.carrier === "tim" && item.technology === "ASIM_ETH");
+                    atmData = datafibermap.filter(item2 => item2.carrier === "tim" && item2.technology === "SIM_ATM_BOND");
+                    ethData = datafibermap.filter(item3 => item3.carrier === "tim" && item3.technology === "SIM_ETH");
+                    p2pData = datafibermap.filter(item4 => item4.carrier === "tim" && item4.technology === "FIBRA_P2P");
 
 
                     let dati
@@ -1644,13 +1693,14 @@
                             ogg = item
                         } else {
                             atmData.forEach(item2 => {
+                                console.log("atmdata2: ", atmData)
                                 if (item2.status === "ATTIVO" || item2.status === "SATURO") {
-                                    dati = atmdata
+                                    dati = atmData
                                     ogg = item2
                                 } else {
                                     ethData.forEach(item3 => {
                                         if (item3.status === "ATTIVO" || item3.status === "SATURO") {
-                                            dati = ethdata
+                                            dati = ethData
                                             ogg = item3
                                         } else {
                                             dati = null
@@ -1726,65 +1776,67 @@
                         });
                     }
                     console.log("conclusa parte rame")
-                    p2pData.forEach(item4 => {
-                        if (item4.data.edr_info.codice_clli != centrale_rame) {
-                            console.log("centrali diverse, la olt è", item4.data.edr_info.codice_clli)
+                    if (p2pData != null) {
+                        p2pData.forEach(item4 => {
+                            if (item4.data.edr_info.codice_clli != centrale_rame) {
+                                console.log("centrali diverse, la olt è", item4.data.edr_info.codice_clli)
 
-                            const risultatibox = document.createElement('div');
-                            risultatibox.className = 'risultatibox';
+                                const risultatibox = document.createElement('div');
+                                risultatibox.className = 'risultatibox';
 
-                            const titoloolt = document.createElement('div');
-                            titoloolt.innerHTML = `<p class="sottotitolo2">CENTRALE OLT di riferimento</p>`;
-                            risultatibox.appendChild(titoloolt);
+                                const titoloolt = document.createElement('div');
+                                titoloolt.innerHTML = `<p class="sottotitolo2">CENTRALE OLT di riferimento</p>`;
+                                risultatibox.appendChild(titoloolt);
 
-                            const nomeolt = document.createElement('p');
-                            nomeolt.innerHTML = `<span>NOME:</span> ${item4.data.edr_info.nome_sede_gat} - ${item4.data.edr_info.codice_clli} - ${item4.data.edr_info.codice_acl_area}`;
-                            risultatibox.appendChild(nomeolt);
+                                const nomeolt = document.createElement('p');
+                                nomeolt.innerHTML = `<span>NOME:</span> ${item4.data.edr_info.nome_sede_gat} - ${item4.data.edr_info.codice_clli} - ${item4.data.edr_info.codice_acl_area}`;
+                                risultatibox.appendChild(nomeolt);
 
-                            const coordinatecentr = document.createElement('p');
-                            coordinatecentr.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${item4.data.edr_info.lat},${item4.data.edr_info.lng}" target="_blank">${item4.data.edr_info.lat},${item4.data.edr_info.lng}</a>`;
-                            risultatibox.appendChild(coordinatecentr);
+                                const coordinatecentr = document.createElement('p');
+                                coordinatecentr.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${item4.data.edr_info.lat},${item4.data.edr_info.lng}" target="_blank">${item4.data.edr_info.lat},${item4.data.edr_info.lng}</a>`;
+                                risultatibox.appendChild(coordinatecentr);
 
-                            const indirizzocentr = document.createElement('p');
-                            indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  <a href ="https://maps.google.com/?q=${item4.data.edr_info.indirizzo.replace('->', ',')} ${item4.data.edr_info.comune}" target="_blank"> ${item4.data.edr_info.indirizzo.replace('->', ',')} - ${item4.data.edr_info.comune} (${item4.data.edr_info.provincia} - ${item4.data.edr_info.regione})</a>`;
-                            risultatibox.appendChild(indirizzocentr);
+                                const indirizzocentr = document.createElement('p');
+                                indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  <a href ="https://maps.google.com/?q=${item4.data.edr_info.indirizzo.replace('->', ',')} ${item4.data.edr_info.comune}" target="_blank"> ${item4.data.edr_info.indirizzo.replace('->', ',')} - ${item4.data.edr_info.comune} (${item4.data.edr_info.provincia} - ${item4.data.edr_info.regione})</a>`;
+                                risultatibox.appendChild(indirizzocentr);
 
-                            const aperturaadsl = document.createElement('p');
-                            aperturaadsl.innerHTML = `<span>APERTURA ADSL_ETH:</span> ${item4.data.edr_info.data_apertura_adsl_eth} `;
-                            risultatibox.appendChild(aperturaadsl);
+                                const aperturaadsl = document.createElement('p');
+                                aperturaadsl.innerHTML = `<span>APERTURA ADSL_ETH:</span> ${item4.data.edr_info.data_apertura_adsl_eth} `;
+                                risultatibox.appendChild(aperturaadsl);
 
-                            if (item4.data.edr_info.data_apertura_fttc != null) {
-                                const datafttc = document.createElement('p');
-                                datafttc.innerHTML = `<span>APERTURA FTTC:</span> ${item4.data.edr_info.data_apertura_fttc} `;
-                                risultatibox.appendChild(datafttc);
-                            } else if (item4.data.edr_info.data_pianificazione_fttc != null) {
-                                const datafttc = document.createElement('p');
-                                datafttc.innerHTML = `<span>PIANIFICAZIONE FTTC:</span> ${item4.data.edr_info.data_pianificazione_fttc} `;
-                                risultatibox.appendChild(datafttc);
-                            } else {
-                                const datafttc = document.createElement('p');
-                                datafttc.innerHTML = `<span>FTTC:</span> Non presente nè pianificata `;
-                                risultatibox.appendChild(datafttc);
-                            }
+                                if (item4.data.edr_info.data_apertura_fttc != null) {
+                                    const datafttc = document.createElement('p');
+                                    datafttc.innerHTML = `<span>APERTURA FTTC:</span> ${item4.data.edr_info.data_apertura_fttc} `;
+                                    risultatibox.appendChild(datafttc);
+                                } else if (item4.data.edr_info.data_pianificazione_fttc != null) {
+                                    const datafttc = document.createElement('p');
+                                    datafttc.innerHTML = `<span>PIANIFICAZIONE FTTC:</span> ${item4.data.edr_info.data_pianificazione_fttc} `;
+                                    risultatibox.appendChild(datafttc);
+                                } else {
+                                    const datafttc = document.createElement('p');
+                                    datafttc.innerHTML = `<span>FTTC:</span> Non presente nè pianificata `;
+                                    risultatibox.appendChild(datafttc);
+                                }
 
-                            const certcoord = document.createElement('p');
-                            certificazione = { true: 'Si', false: 'No' }
-                            certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[ogg.data.edr_info.certificazione_coordinate]} `;
-                            risultatibox.appendChild(certcoord);
+                                const certcoord = document.createElement('p');
+                                certificazione = { true: 'Si', false: 'No' }
+                                certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${certificazione[ogg.data.edr_info.certificazione_coordinate]} `;
+                                risultatibox.appendChild(certcoord);
 
-                            if (item4.data.edr_info.note != "") {
-                                const dismiss = document.createElement('p');
-                                dismiss.innerHTML = `<span>NOTE:</span> ${item4.data.edr_info.in_dismissione} `;
-                                risultatibox.appendChild(dismiss);
-                                const notecentr = document.createElement('p');
-                                notecentr.innerHTML = `<span>NOTE:</span> ${item4.data.edr_info.note} `;
-                                risultatibox.appendChild(notecentr);
+                                if (item4.data.edr_info.note != "") {
+                                    const dismiss = document.createElement('p');
+                                    dismiss.innerHTML = `<span>NOTE:</span> ${item4.data.edr_info.in_dismissione} `;
+                                    risultatibox.appendChild(dismiss);
+                                    const notecentr = document.createElement('p');
+                                    notecentr.innerHTML = `<span>NOTE:</span> ${item4.data.edr_info.note} `;
+                                    risultatibox.appendChild(notecentr);
+                                } else { }
+
+
+                                edrDiv.appendChild(risultatibox);
                             } else { }
-
-
-                            edrDiv.appendChild(risultatibox);
-                        } else { }
-                    });
+                        });
+                    }
 
                 } catch (TypeError) {
                     console.error("TypeError:", TypeError);
@@ -1873,39 +1925,41 @@
                     risultatibox.appendChild(peakSpeed);
                 }
                 consultazioniDiv.appendChild(risultatibox);
+
+                document.getElementById('verificafc-group').style.display = 'block';
             }
             var coordinatefc;
 
             async function geocoding() {
                 console.log("geocode civico standard")
                 try {
-                            comune_geo = document.getElementById("comune").value;
-                            indirizzo_geo = document.getElementById("indirizzo").value;
-                            civico_geo = document.getElementById("civico").options[document.getElementById("civico").selectedIndex].text;
-                            const georequest = await fetch(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=pjson&outFields=Addr_type&forStorage=false&SingleLine=${indirizzo_geo} ${civico_geo} ${comune_geo}`);
-                            const geoData = await georequest.json();
-                            console.log("coord: ", geoData)
+                    comune_geo = document.getElementById("comune").value;
+                    indirizzo_geo = document.getElementById("indirizzo").value;
+                    civico_geo = document.getElementById("civico").options[document.getElementById("civico").selectedIndex].text;
+                    const georequest = await fetch(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=pjson&outFields=Addr_type&forStorage=false&SingleLine=${indirizzo_geo} ${civico_geo} ${comune_geo}`);
+                    const geoData = await georequest.json();
+                    console.log("coord: ", geoData)
 
-                            const geocodeDiv = document.getElementById('geocode-result');
-                            geocodeDiv.innerHTML = '';
+                    const geocodeDiv = document.getElementById('geocode-result');
+                    geocodeDiv.innerHTML = '';
 
-                            const risultatibox = document.createElement('div');
-                            risultatibox.className = 'risultatibox';
+                    const risultatibox = document.createElement('div');
+                    risultatibox.className = 'risultatibox';
 
-                            coordinate = document.createElement('p');
-                            coordinate.innerHTML = `<b>Coordinate: </b><a href="https://www.google.com/maps/place/${geoData.candidates[0].location.y},${geoData.candidates[0].location.x}" target="_blank">${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}</a>`;
-                            risultatibox.appendChild(coordinate);
+                    coordinate = document.createElement('p');
+                    coordinate.innerHTML = `<b>Coordinate: </b><a href="https://www.google.com/maps/place/${geoData.candidates[0].location.y},${geoData.candidates[0].location.x}" target="_blank">${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}</a>`;
+                    risultatibox.appendChild(coordinate);
 
-                            addrtype = document.createElement('p');
-                            addrtype.innerHTML = `<b>Address Type: </b> ${geoData.candidates[0].attributes.Addr_type}`;
-                            addrtype.innerHTML += `<span class="color-g stato-scala">${geoData.candidates[0].score}</p>`;
-                            risultatibox.appendChild(addrtype);
+                    addrtype = document.createElement('p');
+                    addrtype.innerHTML = `<b>Address Type: </b> ${geoData.candidates[0].attributes.Addr_type}`;
+                    addrtype.innerHTML += `<span class="color-g stato-scala">${geoData.candidates[0].score}</p>`;
+                    risultatibox.appendChild(addrtype);
 
-                            coordinatefc = `${geoData.candidates[0].location.y}|${geoData.candidates[0].location.x}`
-        
-                            geocodeDiv.appendChild(risultatibox);
-                        }
-                 catch (TypeError) {
+                    coordinatefc = `${geoData.candidates[0].location.y}|${geoData.candidates[0].location.x}`
+
+                    geocodeDiv.appendChild(risultatibox);
+                }
+                catch (TypeError) {
                     console.log("ERRORE", TypeError)
                 }
             }
@@ -1931,7 +1985,7 @@
                     console.log("ERRORE", TypeError)
                 }
             }
-        
+
             async function vicinanzefc() {
                 console.log("coord fc: ", coordinatefc)
                 const vicinanzeof = await fetch('https://coperturaapi.zeromist.net/fibercop', {
@@ -1946,8 +2000,50 @@
                 });
                 const vicinanzedata = await vicinanzeof.json();
                 console.log(vicinanzedata)
+
+                document.getElementById("adiacenze").style.display = "block"
+                
+                const adiacenzeDiv = document.getElementById("adiacenze")
+
+                const risultatibox = document.createElement('div');
+                risultatibox.className = 'risultatibox';
+
+                const titoload = document.createElement('div');
+                titoload.innerHTML = `<b class="sottotitolo">Civici nelle Vicinanze coperti da FiberCop</b>`;
+                risultatibox.appendChild(titoload);
+
+                adiacenzeDiv.appendChild(risultatibox);
+
+                if (vicinanzedata.length > 0) {           
+                    document.getElementById("adiacenzetable").style.display = "block"
+
+                    const tableBody = document.querySelector("#adiacenzetable tbody");
+                    const tableHeader = document.querySelector("#adiacenzetable thead");
+
+                    vicinanzedata.forEach(item => {
+                        distanza = item.distance_in_km * 1000;
+                        distanzaok = Math.round(distanza * 1000) / 1000
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                        <td>${item.full_street_name}</td>
+                        <td>${distanzaok}m</td>
+                        <td><p class="statocivico-${item.stato_copertura}"></p></td>
+                        `
+                        tableBody.appendChild(row);
+                        adiacenzeDiv.appendChild(tableHeader);
+                        adiacenzeDiv.appendChild(tableBody);
+                    });
+
+
+                } else {
+                    const avviso = document.createElement('div');
+                    avviso.innerHTML = `<p>Nessun civico coperto</p>`;
+                    risultatibox.appendChild(avviso);
+                    adiacenzeDiv.appendChild(risultatibox);
+                }
+
             }
-            
+
             async function mostradati(id) {
                 var riganascosta = document.getElementById(id);
                 if (riganascosta.style.display === "none") {
@@ -1956,7 +2052,7 @@
                     riganascosta.style.display = "none";
                 }
             }
-            
+
         </script>
 </body>
 
