@@ -48,6 +48,11 @@
             cursor: pointer;
         }
 
+        .copiaegon {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
         .results {
             margin-top: 10px;
         }
@@ -264,6 +269,13 @@
 
         .adiacenzetable {
             display: none;
+            text-align: center;
+            table-layout: fixed;
+            width: 600px;
+        }
+
+        .adiacenzetable tr {
+            line-height: 14px;
         }
 
         .eolotable {
@@ -477,6 +489,38 @@
             text-align: center;
         }
 
+        .statocivico-DISPONIBILE {
+            background-color: rgb(29, 163, 47);
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            text-align: center;
+        }
+
+        .statocivico-PROGRAMMATO {
+            background-color: rgb(255, 252, 58);
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            text-align: center;
+        }
+
+        .statocivico-NON {
+            background-color: rgb(255, 84, 84);
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            text-align: center;
+        }
+
+        .DISPONIBILE {
+            background-color: rgb(255, 84, 84);
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            text-align: center;
+        }
+
         .stato-101 {
             background-color: yellow;
         }
@@ -663,6 +707,24 @@
         <div class="fibercop">Copertura FiberCop</div>
         <div class="fibercop-result" id="fibercop-result"></div>
 
+        <div class="adiacenze" id="adiacenze">
+            <table class="adiacenzetable" id="adiacenzetable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Comune</th>
+                        <th>Indirizzo</th>
+                        <th>Stato</th>
+                        <th>Tipo</th>
+                        <th>Distanza</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
         <div class="edr" id="edr">
             <a href="javascript:void(0);" class="click" onclick="edr()">
                 <i class="sottotitolo">EDR Trovati</i>
@@ -726,20 +788,6 @@
                 <tbody>
                 </tbody>
             </table>
-
-            <div class="adiacenze" id="adiacenze">
-                <table class="adiacenzetable" id="adiacenzetable">
-                    <thead>
-                        <tr>
-                            <th>Civico</th>
-                            <th>Distanza</th>
-                            <th>Stato</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
 
 
         </div>
@@ -813,6 +861,8 @@
 
                         const coperturaDiv = document.getElementById('copertura-result');
                         coperturaDiv.innerHTML = '';
+                        const coperturaHeader = document.querySelector('.copertura');
+                        coperturaHeader.innerHTML = `Copertura Open Fiber`;
 
                         const consultazioniDiv = document.getElementById('consultazioni-result');
                         consultazioniDiv.innerHTML = '';
@@ -843,6 +893,9 @@
 
                         document.getElementById('eolotable').getElementsByTagName('tbody')[0].innerHTML = '';
                         document.getElementById('eoloGtable').getElementsByTagName('tbody')[0].innerHTML = '';
+
+                        document.getElementById('adiacenzetable').getElementsByTagName('tbody')[0].innerHTML = '';
+                        document.getElementById("adiacenze").style.display = "none";
 
                         document.getElementById("eolotable").style.display = "none";
                         document.getElementById("eoloGtable").style.display = "none";
@@ -894,6 +947,8 @@
 
                         const coperturaDiv = document.getElementById('copertura-result');
                         coperturaDiv.innerHTML = '';
+                        const coperturaHeader = document.querySelector('.copertura');
+                        coperturaHeader.innerHTML = `Copertura Open Fiber`;
 
                         const eoloDiv = document.getElementById('eolo-result');
                         eoloDiv.innerHTML = '';
@@ -920,6 +975,9 @@
 
                         document.getElementById("eolotable").style.display = "none";
                         document.getElementById("eoloGtable").style.display = "none";
+
+                        document.getElementById('adiacenzetable').getElementsByTagName('tbody')[0].innerHTML = '';
+                        document.getElementById("adiacenze").style.display = "none";
 
                         document.getElementById("edr").style.display = "none";
 
@@ -972,6 +1030,8 @@
 
                 const coperturaDiv = document.getElementById('copertura-result');
                 coperturaDiv.innerHTML = '';
+                const coperturaHeader = document.querySelector('.copertura');
+                coperturaHeader.innerHTML = `Copertura Open Fiber`;
 
                 const consultazioniDiv = document.getElementById('consultazioni-result');
                 consultazioniDiv.innerHTML = '';
@@ -999,6 +1059,9 @@
                 document.getElementById("arcolinktable").style.display = "none";
                 document.getElementById("arcolink").style.display = "none";
                 document.getElementById("arcolink-result").style.display = "none";
+
+                document.getElementById('adiacenzetable').innerHTML = '';
+                document.getElementById("adiacenze").style.display = "none";
 
                 const rameDiv = document.getElementById('rame-result');
                 rameDiv.innerHTML = '';
@@ -1160,7 +1223,7 @@
                         } else {
                             geocoding()
                             const coperturaDiv = document.getElementById('copertura-result');
-                            coperturaDiv.innerHTML = 'AAA Nessuna copertura FTTH OF trovata per questo indirizzo.';
+                            coperturaDiv.innerHTML = 'Nessuna copertura FTTH OF trovata per questo indirizzo.';
                         }
                     } else if (prevenData.length > 0) {
                         geocoding()
@@ -1811,14 +1874,14 @@
                                 centrale_rame = ogg.data.edr_info.codice_clli
                             }
                         });
-                    } else{
+                    } else {
                         const risultatibox = document.createElement('div');
                         risultatibox.className = 'risultatibox';
 
                         const titolocentr = document.createElement('div');
                         titolocentr.innerHTML = `<p class="sottotitolo2">CENTRALE</p>`;
                         risultatibox.appendChild(titolocentr);
-                        
+
                         const avviso = document.createElement('p');
                         avviso.innerHTML = `Non riesco a recuperare i dati sulla centrale`;
                         risultatibox.appendChild(avviso);
@@ -2050,40 +2113,47 @@
                 const vicinanzedata = await vicinanzeof.json();
                 console.log(vicinanzedata)
 
-                document.getElementById("adiacenze").style.display = "block"
+                document.getElementById("adiacenze").style.display = "block";
+                document.getElementById("adiacenzetable").style.display = "block";
 
-                const adiacenzeDiv = document.getElementById("adiacenze")
+                const adiacenzeDiv = document.getElementById("adiacenze");
 
                 const risultatibox = document.createElement('div');
                 risultatibox.className = 'risultatibox';
 
                 const titoload = document.createElement('div');
-                titoload.innerHTML = `<b class="sottotitolo">Civici nelle Vicinanze coperti da FiberCop</b>`;
+                titoload.innerHTML = `<b class="sottotitolo" onclick="mostraadiacenze()">Civici nelle Vicinanze coperti da FiberCop</b>`;
                 risultatibox.appendChild(titoload);
 
                 adiacenzeDiv.appendChild(risultatibox);
 
+                const adiacenzetableBody = document.querySelector("#adiacenzetable tbody");
+                const tableHeader = document.querySelector("#adiacenzetable thead");
+
+                if (!adiacenzetableBody) {
+                    console.error("Table body is null. Ensure that the table structure is correct.");
+                    return;
+                }
+
                 if (vicinanzedata.length > 0) {
-                    document.getElementById("adiacenzetable").style.display = "block"
-
-                    const tableBody = document.querySelector("#adiacenzetable tbody");
-                    const tableHeader = document.querySelector("#adiacenzetable thead");
-
                     vicinanzedata.forEach(item => {
-                        distanza = item.distance_in_km * 1000;
-                        distanzaok = Math.round(distanza * 1000) / 1000
                         const row = document.createElement("tr");
+                        const tipo = item.descrizione ? "P1G" : "PVT";
+                        const egon = item.egon_code;
+                        const distanza = item.distance_in_km * 1000;
+                        const distanzaok = Math.round(distanza * 1000) / 1000;
                         row.innerHTML = `
+                        <td class="copiaegon"><p onclick="copiaegon(${egon});">EGON</p></td>
+                        <td>${item.city}</td>
                         <td>${item.full_street_name}</td>
-                        <td>${distanzaok}m</td>
                         <td><p class="statocivico-${item.stato_copertura}"></p></td>
-                        `
-                        tableBody.appendChild(row);
-                        adiacenzeDiv.appendChild(tableHeader);
-                        adiacenzeDiv.appendChild(tableBody);
+                        <td>${tipo}</td>
+                        <td>${distanzaok}m</td>`;
+                        adiacenzetableBody.appendChild(row);
                     });
 
-
+                    adiacenzeDiv.appendChild(tableHeader);
+                    adiacenzeDiv.appendChild(adiacenzetableBody);
                 } else {
                     const avviso = document.createElement('div');
                     avviso.innerHTML = `<p>Nessun civico coperto</p>`;
@@ -2091,6 +2161,10 @@
                     adiacenzeDiv.appendChild(risultatibox);
                 }
 
+            }
+
+            async function copiaegon(egon) {
+                navigator.clipboard.writeText(egon);
             }
 
             async function mostradati(id) {
@@ -2101,6 +2175,20 @@
                     riganascosta.style.display = "none";
                 }
             }
+
+            function mostraadiacenze() {
+                console.log("tabella adiacenze click");
+                var tabella = document.getElementById("adiacenzetable");
+                if (tabella.style.display === "none") {
+                    console.log("tabella mostrata");
+                    tabella.style.display = "block";
+                } else {
+                    console.log("tabella nascosta");
+                    tabella.style.display = "none";
+                }
+            }
+
+
 
         </script>
 </body>
