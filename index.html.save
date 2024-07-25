@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <title>Verifica Copertura Fibra Ottica</title>
+    <style> 
+
+
+        body {
+            font-family: Poppins;
+            margin: 20px;
+            background: rgb(236, 236, 236);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin-top: 40px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .results {
+            margin-top: 10px;
+        }
+
+        .input {
+            border-radius: 10px;
+        }
+
+        .tasto {
+            background-color: rgb(45, 189, 45);
+            border-radius: 10px;
+            font-size: Medium;
+            width: 75%;
+            display: block;
+            margin-top: 15px;
+            margin: auto;
+            font-family: Poppins;
+            color: white;
+        }
+
+        .divider {
+            margin-top: 25px;
+            margin-bottom: 25px;
+            color: #9292a0
+        }
+
+        .id {
+            font-weight: extra-light;
+            font-size: 15px;
+        }
+
+        .result-item {
+            margin-bottom: 9px;
+            cursor: pointer;
+            color: rgb(0, 0, 0);
+            text-decoration: underline;
+        }
+
+        .consultazioni {
+            margin-top: 20px;
+            font-weight: bold;
+            background-color: #eb8f1e;
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .consultazioni-result {
+            margin-top: 10px;
+            border: 1px solid #97A8BA;
+            background-color: #ffd6ba;
+            padding: 10px;
+            border-radius: 20px;
+        }
+
+        .copertura {
+            margin-top: 20px;
+            font-weight: bold;
+            background-color: #ff0e63;
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .copertura-result {
+            margin-top: 10px;
+            border: 1px solid #D9A3B6;
+            background-color: #FFBFD5;
+            margin-bottom: 10px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 20px;
+        }
+
+        .rame {
+            margin-top: 20px;
+            font-weight: bold;
+            background-color: #ff1b26;
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .rame-result {
+            margin-top: 10px;
+            border: 1px solid #d16a6f;
+            background-color: #d1b8b9;
+            margin-bottom: 10px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 20px;
+        }
+
+        .fibercop {
+            margin-top: 20px;
+            font-weight: bold;
+            background-color: #0033a1;
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .fibercop-result {
+            margin-top: 10px;
+            border: 1px solid #859ac7;
+            background-color: #b4ccff;
+            margin-bottom: 10px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 20px;
+        }
+
+        .fastweb {
+            margin-top: 20px;
+            font-weight: bold;
+            background-color: #fdc400;
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .fastweb-result {
+            margin-top: 10px;
+            border: 1px solid #d6c793;
+            background-color: #ffefba;
+            padding: 10px;
+            border-radius: 20px;
+        }
+        .eolo {
+            margin-top: 20px;
+            font-weight: bold;
+            background-color: #05a2e7;
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+        }
+        .eolo-result {
+            margin-top: 10px;
+            border: 1px solid #88b9ce;
+            background-color: #b1e8ff;
+            padding: 10px;
+            border-radius: 20px;
+        }
+        .arcolink {
+            margin-top: 20px;
+            font-weight: bold;
+            background-color: #662483;
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+            display: none;
+        }
+        .arcolink-result {
+            margin-top: 10px;
+            border: 1px solid #af79c6;
+            background-color: #dca9f1;
+            padding: 10px;
+            border-radius: 20px;
+            display: none;
+        }
+        .arcolinktable {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #af79c6;
+            background-color: #dca9f1;
+            border-radius: 20px;
+            width: 600px;
+            table-layout:fixed;
+            text-align: center;
+            border-spacing: 5px;
+            display: none;
+        }
+        .eolotable {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #88b9ce;
+            background-color: #b1e8ff;
+            border-radius: 20px;
+            width: 600px;
+            table-layout:fixed;
+            text-align: center;
+            border-spacing: 5px;
+            display: none;
+        }
+        .tableid {
+            width: 48px;
+        }
+        .tablemetri {
+            width: 70px;
+        }
+        .tablemetri {
+            width: 60px;
+        }
+        .tablenome {
+            width: 165px;
+        }
+        .tablenomeal {
+            width: 140px;
+        }
+        .tabletechal {
+            width: 140px;
+        }
+        .sottotitolo {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .sottotitolo2 {
+            text-decoration: underline;
+            padding-top: 15px;
+            font-weight: bold;
+        }
+
+        .risultatibox {
+            margin-bottom: 5px;
+        }
+
+        .risultatibox p {
+            margin: 5px 0;
+        }
+
+        .risultatibox span {
+            font-weight: bold;
+        }
+
+        .yes {
+            background-color: green;
+            color: white;
+            padding: 2px 5px;
+        }
+
+        .no {
+            background-color: red;
+            color: white;
+            padding: 2px 5px;
+        }
+
+        .stato-scala {
+            margin-left: 50px;
+            display: inline-block;
+            padding: 2px 5px;
+            color: white;
+            margin-right: 50px;
+        }
+
+        .legendastati {
+            display: inline-block;
+            padding: 2px 5px;
+            color: rgb(0, 0, 0);
+        }
+
+        .statiOF {
+            margin-top: 10px;
+            border: 1px solid #D9A3B6;
+            background-color: #FFBFD5;
+            margin-bottom: 10px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 20px;
+            display: none;
+        }
+        .statiOF_interno {
+            display: none;
+        }
+        .click {
+            color: black;
+            font-style: normal;
+        }
+        .statiOF a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .edr {
+            margin-top: 10px;
+            border: 1px solid #d16a6f;
+            background-color: #d1b8b9;
+            margin-bottom: 10px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 20px;
+            display: none;
+        }
+        .edr_interno {
+            display: none;
+        }
+        .edr a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .vel-vdsl {
+            margin-left: 30px;
+            display: inline-block;
+            padding: 2px 5px;
+            color: rgb(186, 28, 162);
+            margin-right: 5px;
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        .vel-evdsl {
+            display: inline-block;
+            padding: 2px 5px;
+            color: rgb(186, 28, 162);
+            margin-right: 20px;
+            font-weight: normal;
+            font-style: italic;
+
+        }
+
+        .cluster-id {
+            display: inline-block;
+            padding: 2px 5px;
+        }
+
+        .stato-ATTIVO {
+            background-color: rgb(42, 201, 42);
+            display: inline-block;
+            padding: 2px 5px;
+        }
+
+        .stato-APERTO {
+            background-color: rgb(42, 201, 42);
+            display: inline-block;
+            padding: 2px 5px;
+        }
+
+        .stato-VENDIBILE {
+            background-color: rgb(42, 201, 42);
+            display: inline-block;
+            padding: 2px 5px;
+        }
+        .stato-NON {
+            background-color: rgb(255, 86, 86);
+            display: inline-block;
+            padding: 2px 5px;
+        }
+
+        .ATTIVO { /* lo "stato-NON ATTIVO" ha uno spazio e quindi per il css sono due classi diverse*/
+            background-color: rgb(255, 86, 86);
+            display: inline-block;
+            padding: 2px 5px;
+        }
+
+        .stato-PIANIFICATO {
+            background-color: rgb(255, 179, 38);
+            display: inline-block;
+            padding: 2px 5px;
+        }
+
+        .stato-SOSPESO {
+            background-color: rgb(146, 146, 146);
+            display: inline-block;
+            padding: 2px 5px;
+        }
+
+        .stato-SATURO {
+            background-color: rgb(255, 196, 107);
+            display: inline-block;
+            padding: 2px 5px;
+        }
+
+        .stato-101 {
+            background-color: yellow;
+        }
+
+        .stato-101 {
+            background-color: yellow;
+        }
+
+        .stato-102 {
+            background-color: orange;
+        }
+
+        .stato-104 {
+            background-color: lightgreen;
+        }
+
+        .stato-105 {
+            background-color: lightcoral;
+        }
+
+        .stato-106 {
+            background-color: rgb(191, 44, 44);
+        }
+
+        .stato-107 {
+            background-color: yellow;
+        }
+
+        .stato-110 {
+            background-color: rgb(13, 143, 13);
+        }
+
+        .stato-201 {
+            background-color: lightblue;
+        }
+
+        .stato-202 {
+            background-color: rgb(101, 101, 255);
+        }
+
+        .stato-205 {
+            background-color: fuchsia;
+        }
+
+        .stato-302 {
+            background-color: peru;
+        }
+
+        .cluster-AB {
+            background-color: green;
+        }
+
+        .cluster-AGF {
+            background-color: green;
+        }
+
+        .cluster-CD {
+            background-color: orange;
+        }
+
+        .color-n {
+            background-color: black;
+            width: 40px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .color-g {
+            background-color: gray;
+            width: 40px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .color-b {
+            background-color: rgb(255, 255, 255);
+            width: 40px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .bando-true {
+            background-color: green;
+            color: white;
+            padding: 2px 5px;
+        }
+
+        .bando-false {
+            background-color: red;
+            color: white;
+            padding: 2px 5px;
+        }
+
+        .bando-1 {
+            background-color: #f56eb4;
+            color: white;
+            padding: 2px 5px;
+        }
+
+        .bando-2 {
+            background-color: blue;
+            color: white;
+            padding: 2px 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Verifica Copertura Fibra Ottica</h1>
+
+        <div class="form-group">
+            <label for="comune">Comune: <span class="id" id="comune-id"></span></label>
+            <input class="input" type="text" id="comune" placeholder="Inserisci il comune" oninput="verificaComune()">
+            <div class="results" id="comune-results"></div>
+        </div>
+
+        <div class="form-group" id="indirizzo-group" style="display: none;">
+            <label for="indirizzo">Indirizzo: <span id="indirizzo-id"></span></label>
+            <input class="input" type="text" id="indirizzo" placeholder="Inserisci l'indirizzo"
+                oninput="verificaIndirizzo()">
+            <div class="results" id="indirizzo-results"></div>
+        </div>
+
+        <div class="form-group" id="civico-group" style="display: none;">
+            <label for="civico">Civico: <span id="civico-id"></span></label>
+            <select class="input" id="civico" onclick="selezionaCivico()"></select>
+        </div>
+
+        <div class="form-group" id="verifica-group" style="display: none;">
+            <button class="tasto" onclick="verificaCopertura()">Verifica Copertura</button>
+        </div>
+        <hr class="divider">
+
+        <div class="consultazioni">Consultazioni 2021</div>
+        <div class="consultazioni-result" id="consultazioni-result"></div>
+
+        <div class="copertura">Copertura Open Fiber</div>
+        <div class="copertura-result" id="copertura-result"></div>
+
+        <div class="statiOF" id="statiOF">
+            <a href="javascript:void(0);" class="click" onclick="statiof()">
+                <i class="sottotitolo">Legenda Stati</i>
+              </a>
+            <div class="statiOF_interno" id="statiOF_interno">
+                <h3>FTTH</h3>
+                <ul>
+                    <li><b>RFC:</b> Presente collegamento fino a PTE</li>
+                    <li><b>RFA:</b> Presente collegamento verticale degli appartamenti></li>
+                </ul>
+                <ul>
+                    <li><span class="stato-101 legendastati">101</span> - PRE-RFC - Rete in Lavorazione, non ancora vendibile</li>
+                    <li><span class="stato-102 legendastati">102</span> - RFC - Bassa densità (&lt;4 UI), PTA in pozzetto</li>
+                    <li><span class="stato-104 legendastati">104</span> - RFC - PTE in Edificio</li>
+                    <li><span class="stato-105 legendastati">105</span> - RFC - Attesa permessi amministratore</li>
+                    <li><span class="stato-106 legendastati">106</span> - RFC - Diniego permesso amministratore</li>
+                    <li><span class="stato-107 legendastati">101</span> - RFC - Rete in Validazione</li>
+                    <li><span class="stato-110 legendastati">110</span> - RFA - Presente Verticale in edificio</li>
+                    <li><span class="stato-302 legendastati">302</span> - RFC - Vendibile solo PAC/PAL</li>
+                </ul>
+                <h3>FWA</h3>
+                <ul>
+                    <li><span class="stato-201 legendastati">201</span> - Non vendibile</li>
+                    <li><span class="stato-202 legendastati">202</span> - Vendibile</li>
+                    <li><span class="stato-205 legendastati">205</span> - FWA Transitoria</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="fastweb">Copertura FiberCop VULA</div>
+        <div class="fastweb-result" id="fastweb-result"></div>
+
+        <div class="fibercop">Copertura FiberCop</div>
+        <div class="fibercop-result" id="fibercop-result"></div>
+
+        <div class="edr" id="edr">
+            <a href="javascript:void(0);" class="click" onclick="edr()">
+                <i class="sottotitolo">EDR Trovati</i>
+              </a>
+            <div class="edr_interno" id="edr_interno">
+
+            </div>
+        </div>
+
+        <div class="gruppoeolo">
+        <div class="eolo">Copertura Eolo</div>
+        <div class="eolo-result" id="eolo-result"></div>
+        <table class="eolotable" id="eoloGtable">
+            <caption>BTS WaveG</caption>
+            <thead>
+                <tr>
+                    <th class="tableid">ID</th>
+                    <th class="tablenome">Nome</th>
+                    <th class="tablemetri">Dist</th>
+                    <th>Tecnologia</th>
+                    <th>Attivazione</th>
+                    <th class="tablemetri">Altezza</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <table class="eolotable" id="eolotable">
+            <caption>BTS Wave</caption>
+            <thead>
+                <tr>
+                    <th class="tableid">ID</th>
+                    <th class="tablenome">Nome</th>
+                    <th class="tablemetri">Dist</th>
+                    <th>Tecnologia</th>
+                    <th>Attivazione</th>
+                    <th class="tablemetri">Altezza</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <div class="rame">Copertura Rame</div>
+        <div class="rame-result" id="rame-result"></div>
+
+        <div class="arcolink" id="arcolink">Copertura ArcoLink</div>
+        <div class="arcolink-result" id="arcolink-result"></div>
+        <table class="arcolinktable" id="arcolinktable">
+            <caption>BTS Arcolink</caption>
+            <thead>
+                <tr>
+                    <th class="tableid">ID</th>
+                    <th class="tablenomeal">Nome</th>
+                    <th class="tablemetri">Dist</th>
+                    <th class="tabletechal">Tecnologia</th>
+                    <th>Altitudine</th>
+                    <th class="tablemetrial">Altezza</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <script>
+        let comuneId = null;
+        let indirizzoId = null;
+        let civicoId = null;
+
+        async function statiof() {
+            var x = document.getElementById('statiOF_interno');
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            } else {
+                x.style.display = "block";
+            }
+        } 
+        
+        async function edr() {
+            var campo = document.getElementById('edr_interno');
+            if (campo.style.display === "block") {
+                campo.style.display = "none";
+            } else {
+                campo.style.display = "block";
+            }
+        } 
+
+        async function verificaComune() {
+            const comune = document.getElementById('comune').value;
+            if (comune.length < 3) {
+                document.getElementById('comune-results').innerHTML = '';
+                return;
+            }
+
+            const response = await fetch('https://coperturaapi.zeromist.net/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    c: comune,
+                    a: 'comune'
+                })
+            });
+            const data = await response.json();
+
+            const resultsDiv = document.getElementById('comune-results');
+            resultsDiv.innerHTML = '';
+
+            data.results.forEach(result => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.textContent = result.text;
+                div.onclick = () => {
+                    comuneId = result.id;
+                    document.getElementById('comune').value = result.text;
+                    document.getElementById('comune-id').textContent = comuneId;
+                    document.getElementById('indirizzo-group').style.display = 'block';
+                    document.getElementById('comune-results').innerHTML = '';
+                    document.getElementById('indirizzo').value = '';
+                    document.getElementById('civico').innerHTML = '';
+                    document.getElementById('indirizzo-id').textContent = '';
+                    document.getElementById('civico-id').textContent = '';
+                    document.getElementById('civico-group').style.display = 'none';
+                    document.getElementById('verifica-group').style.display = 'none';
+
+                    const fastwebDiv = document.getElementById('fastweb-result');
+                    fastwebDiv.innerHTML = '';
+
+                    const coperturaDiv = document.getElementById('copertura-result');
+                    coperturaDiv.innerHTML = '';
+
+                    const consultazioniDiv = document.getElementById('consultazioni-result');
+                    consultazioniDiv.innerHTML = '';
+
+                    const eoloDiv = document.getElementById('eolo-result');
+                    eoloDiv.innerHTML = '';
+
+                    const fibercopDiv = document.getElementById('fibercop-result');
+                    fibercopDiv.innerHTML = ''; 
+
+                    const rameDiv = document.getElementById('rame-result');
+                    rameDiv.innerHTML = ''; 
+
+                    const edrDiv = document.getElementById('edr_interno');
+                    edrDiv.innerHTML = ''; 
+
+                    const arcolinkDiv = document.getElementById('arcolink-result');
+                    arcolinkDiv.innerHTML = ''; 
+                    document.getElementById('arcolinktable').getElementsByTagName('tbody')[0].innerHTML = '';
+                    document.getElementById("arcolinktable").style.display = "none";
+                    document.getElementById("arcolink").style.display = "none";
+                    document.getElementById("arcolink-result").style.display = "none";
+
+                    document.getElementById('eolotable').getElementsByTagName('tbody')[0].innerHTML = '';
+                    document.getElementById('eoloGtable').getElementsByTagName('tbody')[0].innerHTML = '';
+
+                    document.getElementById("eolotable").style.display = "none";
+                    document.getElementById("eoloGtable").style.display = "none";
+
+                    document.getElementById("edr").style.display = "none";
+                    
+                };
+                resultsDiv.appendChild(div);
+            });
+        }
+
+        async function verificaIndirizzo() {
+            const indirizzo = document.getElementById('indirizzo').value;
+            if (indirizzo.length < 3) {
+                document.getElementById('indirizzo-results').innerHTML = '';
+                return;
+            }
+
+            const response = await fetch('https://coperturaapi.zeromist.net/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    c: comuneId,
+                    s: indirizzo,
+                    a: 'strada'
+                })
+            });
+            const data = await response.json();
+
+            const resultsDiv = document.getElementById('indirizzo-results');
+            resultsDiv.innerHTML = '';
+
+            data.results.forEach(result => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.textContent = result.text;
+                div.onclick = () => {
+                    indirizzoId = result.id;
+                    document.getElementById('indirizzo').value = result.text;
+                    document.getElementById('indirizzo-id').textContent = indirizzoId;
+                    document.getElementById('indirizzo-results').innerHTML = '';
+                    document.getElementById('civico').innerHTML = '';
+                    document.getElementById('civico-id').textContent = '';
+
+                    const fastwebDiv = document.getElementById('fastweb-result');
+                    fastwebDiv.innerHTML = '';
+
+                    const coperturaDiv = document.getElementById('copertura-result');
+                    coperturaDiv.innerHTML = '';
+
+                    const eoloDiv = document.getElementById('eolo-result');
+                    eoloDiv.innerHTML = '';
+
+                    const rameDiv = document.getElementById('rame-result');
+                    rameDiv.innerHTML = ''; 
+
+                    const edrDiv = document.getElementById('edr_interno');
+                    edrDiv.innerHTML = ''; 
+
+                    const fibercopDiv = document.getElementById('fibercop-result');
+                    fibercopDiv.innerHTML = ''; 
+                    
+                    const consultazioniDiv = document.getElementById('consultazioni-result');
+                    consultazioniDiv.innerHTML = '';
+
+                    document.getElementById('eolotable').getElementsByTagName('tbody')[0].innerHTML = '';
+                    document.getElementById('eoloGtable').getElementsByTagName('tbody')[0].innerHTML = '';
+
+                    document.getElementById("eolotable").style.display = "none";
+                    document.getElementById("eoloGtable").style.display = "none";
+
+                    document.getElementById("edr").style.display = "none";
+                    
+                    const arcolinkDiv = document.getElementById('arcolink-result');
+                    arcolinkDiv.innerHTML = ''; 
+                    document.getElementById('arcolinktable').getElementsByTagName('tbody')[0].innerHTML = '';
+                    document.getElementById("arcolinktable").style.display = "none";
+                    document.getElementById("arcolink").style.display = "none";
+                    document.getElementById("arcolink-result").style.display = "none";
+                    
+
+                    caricaCivici();
+                };
+                resultsDiv.appendChild(div);
+            });
+        }
+
+        async function caricaCivici() {
+            const response = await fetch('https://coperturaapi.zeromist.net/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    e: indirizzoId,
+                    a: 'civico'
+                })
+            });
+            const data = await response.json();
+
+            const civicoSelect = document.getElementById('civico');
+            civicoSelect.innerHTML = '';
+
+            data.results.forEach(result => {
+                const option = document.createElement('option');
+                option.value = result.id;
+                option.textContent = result.text;
+                civicoSelect.appendChild(option);
+
+
+            });
+
+            document.getElementById('civico-group').style.display = 'block';
+            document.getElementById('verifica-group').style.display = 'block';
+        }
+
+        function selezionaCivico() {
+            const fastwebDiv = document.getElementById('fastweb-result');
+            fastwebDiv.innerHTML = '';
+
+            const coperturaDiv = document.getElementById('copertura-result');
+            coperturaDiv.innerHTML = '';
+
+            const consultazioniDiv = document.getElementById('consultazioni-result');
+            consultazioniDiv.innerHTML = '';
+
+            const eoloDiv = document.getElementById('eolo-result');
+            eoloDiv.innerHTML = '';
+
+            document.getElementById('eolotable').getElementsByTagName('tbody')[0].innerHTML = '';
+            document.getElementById('eoloGtable').getElementsByTagName('tbody')[0].innerHTML = '';
+            
+            document.getElementById("eolotable").style.display = "none";
+            document.getElementById("eoloGtable").style.display = "none";
+
+            document.getElementById("edr").style.display = "none";
+
+            const fibercopDiv = document.getElementById('fibercop-result');
+            fibercopDiv.innerHTML = '';
+
+            const arcolinkDiv = document.getElementById('arcolink-result');
+            arcolinkDiv.innerHTML = ''; 
+            document.getElementById('arcolinktable').getElementsByTagName('tbody')[0].innerHTML = '';
+            document.getElementById("arcolinktable").style.display = "none";
+            document.getElementById("arcolink").style.display = "none";
+            document.getElementById("arcolink-result").style.display = "none";
+
+            const rameDiv = document.getElementById('rame-result');
+            rameDiv.innerHTML = ''; 
+
+            const edrDiv = document.getElementById('edr_interno');
+            edrDiv.innerHTML = ''; 
+
+            const civicoSelect = document.getElementById('civico');
+            console.log(civicoSelect)
+
+            civicoId = civicoSelect.value;
+            console.log(civicoId)
+            document.getElementById('civico-id').textContent = civicoId;
+
+        }
+
+        async function verificaCopertura() {
+
+            const responsetoken = await fetch('https://coperturaapi.zeromist.net/token', { // codice per ricevere il token API di fiber-map (che cambia ogni 3h)
+                method: 'GET',
+                headers: {
+                },
+            });
+            const datatoken = await responsetoken.json();
+
+
+            //var xhr = new XMLHttpRequest();  // codice per inviare la variabile civicoId al proxy server
+            //xhr.open("POST", "https://coperturaapi.zeromist.net/civico", true);
+            //xhr.setRequestHeader('Content-Type', 'application/json');
+            //xhr.send(JSON.stringify({
+            //    value: civicoId
+            //}));
+
+            const responsefibermap = await fetch(`https://coperturaapi.zeromist.net/fibermap`, { //richiesta a fiber-map
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "authorization": `Bearer ${datatoken}`,
+                },
+		body: JSON.stringify({value:civicoId})
+            });
+            const datafibermap = await responsefibermap.json();
+
+
+            const response = await fetch('https://fim-x-aem.de-c1.eu1.cloudhub.io/api/serviceCoverage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic bXVsZWFlbTpkanAxQDlmazNNMlpsT3MxWHpoNSY='
+                },
+                body: JSON.stringify({
+                    idEgonCivico: civicoId,
+                    idEgonStrada: indirizzoId,
+                    regione: '',
+                    provincia: '',
+                    comune: '',
+                    frazione: '',
+                    cap: '',
+                    particellaTop: '',
+                    indirizzo: '',
+                    civico: '',
+                    scalaPalazzina: ''
+                }),
+            });
+            const data = await response.json();
+
+            const coperturaDiv = document.getElementById('copertura-result');
+            coperturaDiv.innerHTML = '';
+            console.log(data)
+            try {
+                const openFiberData = data.filter(item => item.channel === "OpenFiber");
+                if (openFiberData.length > 0) {
+                    const updateDate = openFiberData[0].UPDATE_DATE.split('T')[0].split('-').reverse().join('/');
+                    const coperturaHeader = document.querySelector('.copertura');
+                    coperturaHeader.innerHTML = `Copertura Open Fiber ( Dati aggiornati al: ${updateDate})`;
+                    var scalaCounter = 0;
+                    openFiberData.forEach(item => {
+                        const risultatibox = document.createElement('div');
+                        risultatibox.className = 'risultatibox';
+
+                        const titoloftth = document.createElement('div');
+                        titoloftth.innerHTML = `<b class="sottotitolo">Civico Coperto da FTTH</b>`;
+                        risultatibox.appendChild(titoloftth);
+
+                        const scalaHeader = document.createElement('div');
+                        const statoScalaColorClass = `stato-${item.STATO_SCALA_PALAZZINA}`;
+                        const clusterIdColorClass = item.clusterId === 'A_B' || item.clusterId === 'AGF' ? 'cluster-AB' : (item.clusterId === 'C_D' ? 'cluster-CD' : '');
+                        if (item.SCALA_PALAZZINA == undefined) {
+                            nome_palazzina = "ASSENTE"
+                        } else {
+                            nome_palazzina = item.SCALA_PALAZZINA
+                        }
+                        scalaHeader.innerHTML = `<b>SCALA_PALAZZINA</b>: ${nome_palazzina}`;
+                        if (item.STATO_SCALA_PALAZZINA) {
+                            scalaHeader.innerHTML += ` <span class="${statoScalaColorClass} stato-scala">${item.STATO_SCALA_PALAZZINA}</span>`;
+                        }
+                        if (item.clusterId) {
+                            scalaHeader.innerHTML += ` <span class="${clusterIdColorClass} cluster-id">${item.clusterId}</span>`;
+                        }
+                        risultatibox.appendChild(scalaHeader);
+
+                        const idScala = document.createElement('p');
+                        idScala.innerHTML = `<span>ID_SCALA:</span> ${item.ID_SCALA}`;
+                        risultatibox.appendChild(idScala);
+
+                        const pop = document.createElement('p');
+                        pop.innerHTML = `<span>POP/PCN:</span> ${item.POP}`;
+                        risultatibox.appendChild(pop);
+
+                        const coordinate = document.createElement('p');
+                        const formattedCoordinates = item.COORDINATE_BUILDING.replace('N', '').replace('E', '').replace('_', ', ');
+                        coordinate.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${formattedCoordinates}" target="_blank">${formattedCoordinates}</a>`;
+                        risultatibox.appendChild(coordinate);
+
+                        if (item.DATA_ULTIMA_MODIFICA_RECORD) {
+                            const ultimaModifica = document.createElement('p');
+                            const formattedUltimaModifica = item.DATA_ULTIMA_MODIFICA_RECORD.split('T')[0].split('-').reverse().join('/');
+                            ultimaModifica.innerHTML = `<span>DATA_ULTIMA_MODIFICA_RECORD:</span> ${formattedUltimaModifica}`;
+                            risultatibox.appendChild(ultimaModifica);
+                        }
+
+                        const insertDate = document.createElement('p');
+                        const formattedInsertDate = item.INSERT_DATE.split('T')[0].split('-').reverse().join('/');
+                        insertDate.innerHTML = `<span>INSERT_DATE:</span> ${formattedInsertDate}`;
+                        risultatibox.appendChild(insertDate);
+
+                        const totaleUi = document.createElement('p');
+                        totaleUi.innerHTML = `<span>TOTALE_UI:</span> ${item.TOTALE_UI}`;
+                        risultatibox.appendChild(totaleUi);
+
+                        const xgsPon = document.createElement('p');
+                        xgsPon.innerHTML = `<span>XGS-PON:</span> <span class="${item.tenGbpsSpeed ? 'yes' : 'no'}">${item.tenGbpsSpeed ? 'Si' : 'No'}</span>`;
+
+                        if (scalaCounter < openFiberData.length - 1) {
+                            xgsPon.innerHTML += `<hr style="margin-top:10px">`
+                        }
+                        risultatibox.appendChild(xgsPon);
+
+                        coperturaDiv.appendChild(risultatibox);
+                        scalaCounter = scalaCounter + 1;
+
+                        var x = document.getElementById('statiOF');
+                        if (x.style.display === "block") {
+                            x.style.display = "none";
+                        } else {
+                            x.style.display = "block";
+                        }
+                    });
+                } else {
+                    const risultatibox = document.createElement('div');
+                    risultatibox.className = 'risultatibox';
+                    const avviso = document.createElement('div');
+                    avviso.innerHTML = `<p style="margin-bottom:15px; font-weight:italic">Nessuna copertura FTTH OF trovata per questo indirizzo.</p>`;
+                    risultatibox.appendChild(avviso);
+                    coperturaDiv.appendChild(risultatibox);                }
+            }
+            catch (TypeError) {
+                    const risultatibox = document.createElement('div');
+                    risultatibox.className = 'risultatibox';
+                    const avviso = document.createElement('div');
+                    avviso.innerHTML = `<p style="margin-bottom:15px; font-weight:italic">Nessuna copertura FTTH OF trovata per questo indirizzo.</p>`;
+                    risultatibox.appendChild(avviso);
+                    coperturaDiv.appendChild(risultatibox);
+                }
+
+            try {
+
+                const fwaofdata = datafibermap.filter(item => item.carrier === "openfiber" && item.family === "FWA" && item.covered === true);
+                if (fwaofdata.length > 0) {
+                    fwaofdata.forEach(item => {
+                        const risultatibox = document.createElement('div');
+                        risultatibox.className = 'risultatibox';
+
+                        const titolofwa = document.createElement('div');
+                        titolofwa.innerHTML = `<p class="sottotitolo2">Civico Coperto da FWA</p>`;
+                        risultatibox.appendChild(titolofwa);
+
+                        const idbuilding = document.createElement('p');
+                        const statoColorClass2 = `stato-${item.data.stato_palazzo}`;
+                        idbuilding.innerHTML = `<span>ID BUILDING:</span> ${item.data.id_building}`;
+                        if (item.data.stato_palazzo) {
+                            idbuilding.innerHTML += ` <span class="${statoColorClass2} stato-scala">${item.data.stato_palazzo}</span>`;
+                        }
+                        risultatibox.appendChild(idbuilding);
+
+                        const pcn = document.createElement('p');
+                        pcn.innerHTML = `<span>POP/PCN:</span> ${item.data.edr}`;
+                        risultatibox.appendChild(pcn);
+
+                        if (item.data.notices != null) {
+                            const prevendibilita = document.createElement('p');
+                            prevendibilita.innerHTML = `<span style="background-color: red">PCN NON RILEGATO</span>`;
+                            risultatibox.appendChild(prevendibilita);
+                        } else {
+                        }
+                        coperturaDiv.appendChild(risultatibox);
+                        
+                        var x = document.getElementById('statiOF');
+                        if (x.style.display === "block") {
+                            x.style.display = "none";
+                        } else {
+                            x.style.display = "block";
+                        }
+                    });
+                } else {
+                    const risultatibox = document.createElement('div');
+                    risultatibox.className = 'risultatibox';
+                    const avviso = document.createElement('div');
+                    avviso.innerHTML = `<p style="margin-top:15px; font-weight:italic">Nessuna copertura FWA OF trovata per questo indirizzo.</p>`;
+                    risultatibox.appendChild(avviso);
+                    coperturaDiv.appendChild(risultatibox);
+                }
+            }
+            catch (TypeError) {
+                const risultatibox = document.createElement('div');
+                risultatibox.className = 'risultatibox';
+                const avviso = document.createElement('div');
+                avviso.innerHTML = `<p style="margin-top:15px; font-weight:italic;">Nessuna copertura FWA OF trovata per questo indirizzo.</p>`;
+                risultatibox.appendChild(avviso);
+                coperturaDiv.appendChild(risultatibox);
+            }
+// ----- Eolo Inizio
+            try {
+                const eoloDiv = document.getElementById('eolo-result');
+                const eoloDiv2 = document.getElementById('eolotable');
+                const eoloDiv3 = document.getElementById('eoloGtable');
+                eoloDiv.innerHTML = '';
+
+                const eolowData = datafibermap.filter(item => item.carrier === "eolo" && item.technology === "WIRELESS");
+                const eolowgData = datafibermap.filter(item2 => item2.carrier === "eolo" && item2.technology === "WIRELESS_28");
+
+                let stato_wg = '';
+                eolowgData.forEach(item2 => {
+                    stato_wg = `${item2.status}`;
+                    if (item2.status === "ATTIVO") {
+                        document.getElementById("eoloGtable").style.display = "table";
+                    } else {
+                    }
+                });
+
+
+
+                const tableBody = document.querySelector("#eolotable tbody");
+                const tableGBody = document.querySelector("#eoloGtable tbody");
+                const risultatibox = document.createElement('div');
+                risultatibox.className = 'risultatibox';
+                eolowData.forEach(item => {
+
+                    if (item.status === "ATTIVO") {
+                        document.getElementById("eolotable").style.display = "table";
+                    } else {
+                    }
+                    
+                    const statoewg = document.createElement('p');
+                    statoewg.innerHTML = `<span>WaveG:</span> <p class="stato-${stato_wg}">${stato_wg}</p>`;
+                    risultatibox.appendChild(statoewg);
+
+                    const statoew = document.createElement('p');
+                    statoew.innerHTML = `<span>Wave:</span> <p class="stato-${item.status}">${item.status}</p>`;
+                    risultatibox.appendChild(statoew);
+                });
+
+
+                eolowgData.forEach(item2 => {
+                    item2.data.forEach(dataItem => {
+                        distanzam = Math.round(dataItem.distance);
+                        const row = document.createElement("tr");
+                        if (dataItem.tech_string == "EOLOwave + EOLOwaveG") {
+                            tecnologia = "Ew + EwG"
+                        } else if (dataItem.tech_string == "EOLOwave") {
+                            tecnologia = "Ew"
+                        } else if (dataItem.tech_string == "EOLOwaveG") {
+                            tecnologia = "EwG"
+                        } else if (dataItem.tech_string == "EOLOwave2 + EolowaveG") {
+                            tecnologia = "Ew2 + EwG"
+                        } else if (dataItem.tech_string == "EOLOwave2") {
+                            tecnologia = "Ew2"
+                        } else if (dataItem.tech_string == "EOLOwave + EOLOwave2 + EOLOwaveG") {
+                            tecnologia = "Ew + Ew2 + EwG"
+                        }
+                        row.innerHTML = `
+                        <td>${dataItem.id}</td>
+                        <td><a href="https://www.google.com/maps/place/${dataItem.lat},${dataItem.lng}" target="_blank">${dataItem.nome}</a></td>
+                        <td>${distanzam}m</td>
+                        <td>${tecnologia}</td>
+                        <td>${dataItem.data_attivazione}</td>
+                        <td>${dataItem.elevation}m</td>`;
+                        tableGBody.appendChild(row);
+                    });
+                })
+
+                eolowData.forEach(item => {
+                    item.data.forEach(dataItem => {
+                        distanzam = Math.round(dataItem.distance);
+                        const row = document.createElement("tr");
+                        if (dataItem.tech_string == "EOLOwave + EOLOwaveG") {
+                            tecnologia = "Ew + EwG"
+                        } else if (dataItem.tech_string == "EOLOwave") {
+                            tecnologia = "Ew"
+                        } else if (dataItem.tech_string == "EOLOwaveG") {
+                            tecnologia = "EwG"
+                        } else if (dataItem.tech_string == "EOLOwave2 + EolowaveG") {
+                            tecnologia = "Ew2 + EwG"
+                        } else if (dataItem.tech_string == "EOLOwave2") {
+                            tecnologia = "Ew2"
+                        } else if (dataItem.tech_string == "EOLOwave + EOLOwave2 + EOLOwaveG") {
+                            tecnologia = "Ew + Ew2 + EwG"
+                        }
+                        row.innerHTML = `
+                        <td>${dataItem.id}</td>
+                        <td><a href="https://www.google.com/maps/place/${dataItem.lat},${dataItem.lng}" target="_blank">${dataItem.nome}</a></td>
+                        <td>${distanzam}m</td>
+                        <td>${tecnologia}</td>
+                        <td>${dataItem.data_attivazione}</td>
+                        <td>${dataItem.elevation}m</td>`;
+                        tableBody.appendChild(row);
+                    });
+                })
+                eoloDiv.appendChild(risultatibox);
+
+            } catch (error) {
+            }
+
+
+// ---- Eolo Fine
+
+
+                try {
+                    const fastwebDiv = document.getElementById('fastweb-result');
+                    fastwebDiv.innerHTML = '';
+
+                    const fastwebData = data.filter(item => item.channel === "Fastweb");
+                    if (fastwebData.length > 0) {
+
+                        fastwebData.forEach(item => {
+                            const risultatibox = document.createElement('div');
+                            risultatibox.className = 'risultatibox';
+
+                            const statoTecnico = document.createElement('p');
+                            statoTecnico.innerHTML = `<span>STATO TECNICO:</span> <p class="stato-${item.STATO_TECNICO_GPON}">${item.STATO_TECNICO_GPON}</p>`;
+                            risultatibox.appendChild(statoTecnico);
+
+                            const statoVendibilita = document.createElement('p');
+                            statoVendibilita.innerHTML = `<span>STATO VENDIBILITÀ:</span> <p class="stato-${item.STATO_VENDIBILITA_GPON}">${item.STATO_VENDIBILITA_GPON}</p>`;
+                            risultatibox.appendChild(statoVendibilita);
+
+                            if (item.PREVISIONE_AMPLIAMENTO_GPON === null) {
+                                const statoAmpliamento = document.createElement('p');
+                                statoAmpliamento.innerHTML = `<span>STATO AMPLIAMENTO GPON: </span> null`;
+                                risultatibox.appendChild(statoAmpliamento);
+                            } else {
+                                const statoAmpliamento = document.createElement('p');
+                                statoAmpliamento.innerHTML = `<span>STATO AMPLIAMENTO GPON: </span>  ${item.STATO_AMPLIAMENTO_GPON}`;
+                                risultatibox.appendChild(statoAmpliamento);
+                            }
+                            fastwebDiv.appendChild(risultatibox);
+                        });
+                    } else {
+                        const fastwebDiv = document.getElementById('fastweb-result');
+                        fastwebDiv.innerHTML = 'Nessuna copertura FiberCop VULA trovata per questo indirizzo.';
+                    }
+                } catch (TypeError) {
+                    const fastwebDiv = document.getElementById('fastweb-result');
+                    fastwebDiv.innerHTML = 'Nessuna copertura FiberCop VULA trovata per questo indirizzo.';
+                    }
+// INIZIO FIBERCOP
+                const fibercopDiv = document.getElementById('fibercop-result');
+                fibercopDiv.innerHTML = '';
+                try {
+
+
+                    const ftthData = datafibermap.filter(item => item.carrier === "tim" && item.technology === "FTTH");
+
+                    ftthData.forEach(item => {
+                        const risultatibox = document.createElement('div');
+                        risultatibox.className = 'risultatibox';
+
+                        const titoloFTTH = document.createElement('div');
+                        titoloFTTH.innerHTML = `<p class="sottotitolo">FTTH</p>`;
+                        risultatibox.appendChild(titoloFTTH);
+
+                        const stato = document.createElement('p');
+                        stato.innerHTML = `<span>STATO:</span> <p class="stato-${item.status}">${item.status}</p>`;
+                        risultatibox.appendChild(stato);
+
+                        if (item.status === "PIANIFICATO") {
+                            const pianifica = document.createElement('p');
+                            pianifica.innerHTML = `<span>Mese:</span> ${item.data.pianificazione}`;
+                            risultatibox.appendChild(pianifica);
+                        }
+
+                        if (item.status === "ATTIVO" || item.status === "PIANIFICATO" || item.status === "SOSPESO") {
+                            if (`${item.data.edr_info.indirizzo}`.includes("->")) {
+                                var INDIRIZZO = `${item.data.edr_info.indirizzo}`.replace("->", " ");
+                            } else  {
+                                INDIRIZZO = `${item.data.edr_info.indirizzo}`
+                            }
+                            console.log(INDIRIZZO)
+                            const CLLI = document.createElement('p');
+                            CLLI.innerHTML = `<span>CENTRALE: </span> ${item.data.edr_info.nome} - <a href="https://www.google.com/maps/place/${item.data.edr_info.lat},${item.data.edr_info.lng}" target="_blank">${item.data.edr}</a> - <a href="https://maps.google.com/?q=${INDIRIZZO} ${item.data.edr_info.comune}" target="_blank">${item.data.edr_info.codice_acl_area}</a>`;
+                            risultatibox.appendChild(CLLI);
+
+                            const PON = document.createElement('p');
+                            PON.innerHTML = `<span>Tipo PON:</span> ${item.data.tipo_pon}/${item.data.maxspeed}`;
+                            risultatibox.appendChild(PON);
+                        }
+
+                        fibercopDiv.appendChild(risultatibox);
+
+                        
+                        document.getElementById("edr").style.display = "block";
+                    });
+                } catch (TypeError) {
+                    console.error("TypeError:", TypeError);
+                }
+
+                try {
+                    const fttcData = datafibermap.filter(item => item.carrier === "tim" && item.technology === "FTTC");
+                    fttcData.forEach(item => {
+                        const risultatibox = document.createElement('div');
+                        risultatibox.className = 'risultatibox';
+
+                        const titoloFTTC = document.createElement('div');
+                        titoloFTTC.innerHTML = `<p class="sottotitolo2">FTTC</p>`;
+                        risultatibox.appendChild(titoloFTTC);
+
+                        const stato = document.createElement('p');
+                        stato.innerHTML = `<span>STATO:</span> <p class="stato-${item.status}">${item.status}</p>`;
+                        risultatibox.appendChild(stato);
+
+                        if (item.status === "PIANIFICATO") {
+                            const pianifica = document.createElement('p');
+                            pianifica.innerHTML = `<span>MESE:</span> ${item.data.pianificazione}`;
+                            risultatibox.appendChild(pianifica);
+                        }
+
+                        if (item.status === "ATTIVO" || item.status === "PIANIFICATO" || item.status === "SOSPESO" || item.status === "SATURO") {
+                            const centrale = document.createElement('p');
+                            centrale.innerHTML = `<span>CENTRALE/ONU:</span> ${item.data.clli_centrale} - <a href="https://www.google.com/maps/place/${item.data.edr_info.lat},${item.data.edr_info.lng}" target="_blank">${item.data.edr}</a>   (${item.data.distanza}m)</p>`;
+                            risultatibox.appendChild(centrale);
+                            const velocita = document.createElement('p');
+                            velocita.innerHTML = `<span>VELOCITÀ: </span> ${item.data.maxspeed}`;
+                            velocita.innerHTML += `<p class="vel-vdsl"> ${item.data.velocita_dettaglio.download.fttc}/${item.data.velocita_dettaglio.upload.fttc}</p>`;
+                            velocita.innerHTML += ` <p class="vel-evdsl">${item.data.velocita_dettaglio.download.evdsl}/${item.data.velocita_dettaglio.upload.evdsl}</p>`;
+                            risultatibox.appendChild(velocita);
+                        }
+                        fibercopDiv.appendChild(risultatibox);
+                    });
+
+                } catch (TypeError) {
+                    console.error("TypeError:", TypeError);
+                }
+
+// FINE FIBERCOP
+// INIZIO RAME
+                try {
+                    const rameDiv = document.getElementById('rame-result');
+                    rameDiv.innerHTML = '';
+
+                    const adslData = datafibermap.filter(item => item.carrier === "tim" && item.technology === "ASIM_ETH");
+                    if (adslData.length > 0) {
+
+                        adslData.forEach(item => {
+                            const risultatibox = document.createElement('div');
+                            risultatibox.className = 'risultatibox';
+
+                            const titoloADSL = document.createElement('div');
+                            titoloADSL.innerHTML = `<p class="sottotitolo">ADSL</p>`;
+                            risultatibox.appendChild(titoloADSL);
+
+                            const statoadsl = document.createElement('p');
+                            statoadsl.innerHTML = `<span>STATO:</span> <p class="stato-${item.status}">${item.status}</p>`;
+                            risultatibox.appendChild(statoadsl);
+
+                            if (item.status != "NON ATTIVO") {
+
+                                if (`${item.data.edr_info.indirizzo}`.includes("->")) {
+                                    var INDIRIZZO = `${item.data.edr_info.indirizzo}`.replace("->", " ");
+                                } else  {
+                                    INDIRIZZO = `${item.data.edr_info.indirizzo}`
+                                }
+
+                                const centraleadsl = document.createElement('p');
+                                centraleadsl.innerHTML = `<span>CENTRALE: </span> ${item.data.edr_info.nome} - <a href="https://www.google.com/maps/place/${item.data.edr_info.lat},${item.data.edr_info.lng}" target="_blank">${item.data.edr}</a> - <a href="https://maps.google.com/?q=${INDIRIZZO} ${item.data.edr_info.comune}" target="_blank">${item.data.edr_info.codice_acl_area}</a> (${item.data.distanza})`;
+                                risultatibox.appendChild(centraleadsl);
+
+                                const dwn6 = item.data.velocita_dettaglio.download["6db"];
+                                const up6 = item.data.velocita_dettaglio.upload["6db"];
+                                const dwn12 = item.data.velocita_dettaglio.download["12db"];
+                                const up12 = item.data.velocita_dettaglio.upload["12db"];
+
+                                const velocita = document.createElement('p');
+                                velocita.innerHTML = `<span>VELOCITÀ: </span> ${item.data.maxspeed}`;
+                                velocita.innerHTML += `<p class="vel-vdsl"> ${dwn6}/${up6}</p>`;
+                                velocita.innerHTML += ` <p class="vel-evdsl">${dwn12}/${up12}</p>`;
+                                risultatibox.appendChild(velocita);
+                            } else {}
+
+                            rameDiv.appendChild(risultatibox);
+                        });
+                    }
+
+                    const atmData = datafibermap.filter(item => item.carrier === "tim" && item.technology === "SIM_ATM_BOND");
+                    if (atmData.length > 0) {
+
+                        atmData.forEach(item => {
+                            const risultatibox = document.createElement('div');
+                            risultatibox.className = 'risultatibox';
+
+                            const titoloATM = document.createElement('div');
+                            titoloATM.innerHTML = `<p class="sottotitolo2">ATM SIMMETRICO</p>`;
+                            risultatibox.appendChild(titoloATM);
+
+                            const statoatm = document.createElement('div');
+                            statoatm.innerHTML = `<span>STATO:</span> <p class="stato-${item.status}">${item.status}</p>`;
+                            risultatibox.appendChild(statoatm);
+
+                            if (item.status != "NON ATTIVO") {
+
+                            if (`${item.data.edr_info.indirizzo}`.includes("->")) {
+                                var INDIRIZZO = `${item.data.edr_info.indirizzo}`.replace("->", " ");
+                            } else  {
+                                INDIRIZZO = `${item.data.edr_info.indirizzo}`
+                            }
+
+                            const centraleatm = document.createElement('p');
+                            centraleatm.innerHTML = `<span>CENTRALE: </span> ${item.data.edr_info.nome} - <a href="https://www.google.com/maps/place/${item.data.edr_info.lat},${item.data.edr_info.lng}" target="_blank">${item.data.edr}</a> - <a href="https://maps.google.com/?q=${INDIRIZZO} ${item.data.edr_info.comune}" target="_blank">${item.data.edr_info.codice_acl_area}</a> (${item.data.distanza})`;
+                            risultatibox.appendChild(centraleatm);
+
+                            const velocita = document.createElement('p');
+                            velocita.innerHTML = `<span>VELOCITÀ: </span> ${item.data.maxspeed}`;
+                            } else {}
+                            rameDiv.appendChild(risultatibox);
+                        });
+                    }
+
+                    const ethData = datafibermap.filter(item => item.carrier === "tim" && item.technology === "SIM_ETH");
+                    if (ethData.length > 0) {
+
+                        ethData.forEach(item => {
+                            const risultatibox = document.createElement('div');
+                            risultatibox.className = 'risultatibox';
+
+                            const titoloETH = document.createElement('div');
+                            titoloETH.innerHTML = `<p class="sottotitolo2">ETH SIMMETRICO</p>`;
+                            risultatibox.appendChild(titoloETH);
+
+                            const statoeth = document.createElement('div');
+                            statoeth.innerHTML = `<span>STATO:</span> <p class="stato-${item.status}">${item.status}</p>`;
+                            risultatibox.appendChild(statoeth);
+
+                            if (item.status != "NON ATTIVO") {
+
+                            if (`${item.data.edr_info.indirizzo}`.includes("->")) {
+                                var INDIRIZZO = `${item.data.edr_info.indirizzo}`.replace("->", " ");
+                            } else  {
+                                INDIRIZZO = `${item.data.edr_info.indirizzo}`
+                            }
+
+                            const centraleeth = document.createElement('p');
+                            centraleeth.innerHTML = `<span>CENTRALE: </span> ${item.data.edr_info.nome} - <a href="https://www.google.com/maps/place/${item.data.edr_info.lat},${item.data.edr_info.lng}" target="_blank">${item.data.edr}</a> - <a href="https://maps.google.com/?q=${INDIRIZZO} ${item.data.edr_info.comune}" target="_blank">${item.data.edr_info.codice_acl_area}</a> (${item.data.distanza})`;
+                            risultatibox.appendChild(centraleeth);
+
+                            const velocita = document.createElement('p');
+                            velocita.innerHTML = `<span>VELOCITÀ: </span> ${item.data.maxspeed}`;
+                            } else {}
+                            rameDiv.appendChild(risultatibox);
+
+                        });
+                    }
+                } catch (TypeError) {
+                    console.error("TypeError:", TypeError);
+                    const rameDiv = document.getElementById('rame-result');
+                    rameDiv.innerHTML = 'ERRORE - Nessuna copertura rame trovata per questo indirizzo.';
+                    }
+
+// Fine rame
+
+                try {
+                    const edrDiv = document.getElementById('edr_interno');
+                    edrDiv.innerHTML = '';
+
+                    const fttcData = datafibermap.filter(item => item.carrier === "tim" && item.technology === "FTTC");
+
+                    fttcData.forEach(item => {
+
+                        if (item.status === "ATTIVO" || item.status === "SATURO" || item.status === "PIANIFICATO") {
+                            const risultatibox = document.createElement('div');
+                            risultatibox.className = 'risultatibox';
+
+                            const titoloARL = document.createElement('div');
+                            titoloARL.innerHTML = `<p class="sottotitolo">ARL</p>`;
+                            risultatibox.appendChild(titoloARL);
+
+                            const nomearl = document.createElement('p');
+		            console.log(`munnezza rigida ${item.data.edr_info.clli_onu} ${`)
+                            if (item.data.edr_info.data_apertura_fttc != null) {
+
+                                nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_apertura_fttc})`;
+                            } else {
+                                nomearl.innerHTML = `<span>NOME:</span> ${item.data.edr} - ${item.data.edr_info.clli_onu} (${item.data.edr_info.data_pianificazione_fttc})`;
+                            }
+                            risultatibox.appendChild(nomearl);
+
+                            const coordinatearl = document.createElement('p');
+                            coordinatearl.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${item.data.edr_info.lat},${item.data.edr_info.lng}" target="_blank">${item.data.edr_info.lat},${item.data.edr_info.lng}</a>`;
+                            risultatibox.appendChild(coordinatearl);
+
+                            const indirizzoarl = document.createElement('p');
+                            indirizzoarl.innerHTML = `<span>INDIRIZZO:</span> ${item.data.edr_info.particella} ${item.data.edr_info.via}, ${item.data.edr_info.civico} - ${item.data.edr_info.comune} (${item.data.edr_info.provincia})`;
+                            risultatibox.appendChild(indirizzoarl);
+                            console.log(item.data.maxspeed)
+                            console.log(item.data.edr_info.velocita_fttc)
+                            if (item.data.maxspeed == item.data.edr_info.velocita_fttc) {
+                                const velocitaarl = document.createElement('p');
+                                velocitaarl.innerHTML = `<span>VELOCITÀ:</span> ${item.data.edr_info.velocita_fttc}`;
+                                risultatibox.appendChild(velocitaarl);
+                            } else {
+                                const velocitaarl = document.createElement('p');
+                                velocitaarl.innerHTML = `<span>VELOCITÀ:</span> Upgrade a 200M`;
+                                risultatibox.appendChild(velocitaarl);
+                            }
+
+                            edrDiv.appendChild(risultatibox);
+                        }
+                    });
+
+                    const adslData = datafibermap.filter(item => item.carrier === "tim" && item.technology === "ASIM_ETH");
+                    const atmData = datafibermap.filter(item2 => item2.carrier === "tim" && item2.technology === "SIM_ATM_BOND");
+                    const ethData = datafibermap.filter(item3 => item3.carrier === "tim" && item3.technology === "SIM_ETH");
+                    const p2pData = datafibermap.filter(item4 => item4.carrier === "tim" && item4.technology === "FIBRA_P2P");
+
+
+                    let dati
+                    let ogg
+                    adslData.forEach(item => {
+                        if (item.status === "ATTIVO" || item.status === "SATURO") {
+                            dati = adslData
+                            ogg = item
+                        } else {
+                            atmData.forEach(item2 => {
+                                if (item2.status === "ATTIVO" || item2.status === "SATURO") {
+                                    dati = atmdata
+                                    ogg = item2
+                                } else {
+                                    ethData.forEach(item3 => {
+                                        if (item3.status === "ATTIVO" || item3.status === "SATURO") {
+                                            dati = ethdata
+                                            ogg = item3
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    });
+
+                    dati.forEach(ogg => {
+                        const risultatibox = document.createElement('div');
+                        risultatibox.className = 'risultatibox';
+
+                        const titolocentr = document.createElement('div');
+                        titolocentr.innerHTML = `<p class="sottotitolo2">CENTRALE</p>`;
+                        risultatibox.appendChild(titolocentr);
+
+                        const nomecentr = document.createElement('p');
+                        nomecentr.innerHTML = `<span>NOME:</span> ${ogg.data.edr_info.nome_sede_gat} - ${ogg.data.edr_info.codice_clli} - ${ogg.data.edr_info.codice_acl_area}`;
+                        risultatibox.appendChild(nomecentr);
+
+                        const coordinatecentr = document.createElement('p');
+                        coordinatecentr.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${ogg.data.edr_info.lat},${ogg.data.edr_info.lng}" target="_blank">${ogg.data.edr_info.lat},${ogg.data.edr_info.lng}</a>`;
+                        risultatibox.appendChild(coordinatecentr);
+
+                        const indirizzocentr = document.createElement('p');
+                        indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  ${ogg.data.edr_info.indirizzo} - ${ogg.data.edr_info.comune} (${ogg.data.edr_info.provincia} - ${ogg.data.edr_info.regione})`;
+                        risultatibox.appendChild(indirizzocentr);
+
+                        const aperturaadsl = document.createElement('p');
+                        aperturaadsl.innerHTML = `<span>APERTURA ADSL_ETH:</span> ${ogg.data.edr_info.data_apertura_adsl_eth} `;
+                        risultatibox.appendChild(aperturaadsl);
+
+                        if (ogg.data.edr_info.data_apertura_fttc != null) {
+                            const datafttc = document.createElement('p');
+                            datafttc.innerHTML = `<span>APERTURA FTTC:</span> ${ogg.data.edr_info.data_apertura_fttc} `;
+                            risultatibox.appendChild(datafttc);
+                        } else if (ogg.data.edr_info.data_pianificazione_fttc != null) {
+                            const datafttc = document.createElement('p');
+                            datafttc.innerHTML = `<span>APERTURA FTTC:</span> ${ogg.data.edr_info.data_pianificazione_fttc} `;
+                            risultatibox.appendChild(datafttc);
+                        } else {
+                            const datafttc = document.createElement('p');
+                            datafttc.innerHTML = `<span>APERTURA FTTC:</span> Non presente nè pianificata `;
+                            risultatibox.appendChild(datafttc);
+                        }
+
+                        const certcoord = document.createElement('p');
+                        certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${ogg.data.edr_info.certificazione_coordinate} `;
+                        risultatibox.appendChild(certcoord);
+
+                        if (ogg.data.edr_info.note != "") {
+                            const dismiss = document.createElement('p');
+                            dismiss.innerHTML = `<span>NOTE:</span> ${ogg.data.edr_info.in_dismissione} `;
+                            risultatibox.appendChild(dismiss);
+                            const notecentr = document.createElement('p');
+                            notecentr.innerHTML = `<span>NOTE:</span> ${ogg.data.edr_info.note} `;
+                            risultatibox.appendChild(notecentr);
+                        } else {}
+
+                        edrDiv.appendChild(risultatibox);
+                    });
+                    console.log("conclusa parte rame")
+                    p2pData.forEach(item4 => {
+                        console.log("la olt è", item4.data.edr_info.codice_clli)
+                        if(item4.data.edr_info.codice_clli != ogg.data.edr_info.codice_clli) {
+                            console.log("centrali diverse, la olt è", item4.data.edr_info.codice_clli)
+
+                            const risultatibox = document.createElement('div');
+                            risultatibox.className = 'risultatibox';
+
+                            const titoloolt = document.createElement('div');
+                            titoloolt.innerHTML = `<p class="sottotitolo2">CENTRALE OLT di riferimento</p>`;
+                            risultatibox.appendChild(titoloolt);
+
+                            const nomeolt = document.createElement('p');
+                            nomeolt.innerHTML = `<span>NOME:</span> ${item4.data.edr_info.nome_sede_gat} - ${item4.data.edr_info.codice_clli} - ${item4.data.edr_info.codice_acl_area}`;
+                            risultatibox.appendChild(nomeolt);
+
+                            const coordinatecentr = document.createElement('p');
+                            coordinatecentr.innerHTML = `<span>COORDINATE:</span> <a href="https://www.google.com/maps/place/${item4.data.edr_info.lat},${item4.data.edr_info.lng}" target="_blank">${item4.data.edr_info.lat},${item4.data.edr_info.lng}</a>`;
+                            risultatibox.appendChild(coordinatecentr);
+
+                            const indirizzocentr = document.createElement('p');
+                            indirizzocentr.innerHTML = `<span>INDIRIZZO:</span>  ${item4.data.edr_info.indirizzo} - ${item4.data.edr_info.comune} (${item4.data.edr_info.provincia} - ${item4.data.edr_info.regione})`;
+                            risultatibox.appendChild(indirizzocentr);
+
+                            const aperturaadsl = document.createElement('p');
+                            aperturaadsl.innerHTML = `<span>APERTURA ADSL_ETH:</span> ${item4.data.edr_info.data_apertura_adsl_eth} `;
+                            risultatibox.appendChild(aperturaadsl);
+
+                            if (item4.data.edr_info.data_apertura_fttc != null) {
+                                const datafttc = document.createElement('p');
+                                datafttc.innerHTML = `<span>APERTURA FTTC:</span> ${item4.data.edr_info.data_apertura_fttc} `;
+                                risultatibox.appendChild(datafttc);
+                            } else if (item4.data.edr_info.data_pianificazione_fttc != null) {
+                                const datafttc = document.createElement('p');
+                                datafttc.innerHTML = `<span>APERTURA FTTC:</span> ${item4.data.edr_info.data_pianificazione_fttc} `;
+                                risultatibox.appendChild(datafttc);
+                            } else {
+                                const datafttc = document.createElement('p');
+                                datafttc.innerHTML = `<span>APERTURA FTTC:</span> Non presente nè pianificata `;
+                                risultatibox.appendChild(datafttc);
+                            }
+
+                        const certcoord = document.createElement('p');
+                        certcoord.innerHTML = `<span>CERTIFICAZIONE COORDINATE:</span> ${item4.data.edr_info.certificazione_coordinate} `;
+                        risultatibox.appendChild(certcoord);
+
+                        if (item4.data.edr_info.note != "") {
+                            const dismiss = document.createElement('p');
+                            dismiss.innerHTML = `<span>NOTE:</span> ${item4.data.edr_info.in_dismissione} `;
+                            risultatibox.appendChild(dismiss);
+                            const notecentr = document.createElement('p');
+                            notecentr.innerHTML = `<span>NOTE:</span> ${item4.data.edr_info.note} `;
+                            risultatibox.appendChild(notecentr);
+                        } else {}
+
+
+                            edrDiv.appendChild(risultatibox);
+                        } else {}
+                    });   
+
+                } catch (TypeError) {
+                    console.error("TypeError:", TypeError);
+                }
+
+                try {
+                    const arcolinkDiv = document.getElementById('arcolink-result');
+                    arcolinkDiv.innerHTML = '';
+
+                    const arcolinkData = datafibermap.filter(item => item.carrier === "arcolink" && item.technology === "WIRELESS");
+                    console.log("Arcolink:", arcolinkData)
+
+                    const arcolinktableBody = document.querySelector("#arcolinktable tbody");
+                    const risultatibox = document.createElement('div');
+                    risultatibox.className = 'risultatibox';
+                    arcolinkData.forEach(item => {
+
+                        if (item.status === "ATTIVO") {
+                            document.getElementById("arcolinktable").style.display = "table";
+                            document.getElementById("arcolink").style.display = "block";
+                            document.getElementById("arcolink-result").style.display = "block";
+                        } else {}
+                        
+                        const statoarcolink = document.createElement('p');
+                        statoarcolink.innerHTML = `<span>STATO:</span> <p class="stato-${item.status}">${item.status}</p>`;
+                        risultatibox.appendChild(statoarcolink);
+
+                        item.data.forEach(dataItem => {
+                            distanzam = Math.round(dataItem.distance);
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
+                            <td>${dataItem.id}</td>
+                            <td><a href="https://www.google.com/maps/place/${dataItem.lat},${dataItem.lng}" target="_blank">${dataItem.nome}</a></td>
+                            <td>${distanzam}m</td>
+                            <td>${dataItem.tech_string}</td>
+                            <td>${dataItem.elevation}m</td>
+                            <td>${dataItem.altezza_traliccio}m</td>`;
+                            arcolinktableBody.appendChild(row);
+                        });
+                    arcolinkDiv.appendChild(risultatibox);
+                    });
+
+                } catch (error) {}
+
+
+
+                const consultazioniDiv = document.getElementById('consultazioni-result');
+                consultazioniDiv.innerHTML = '';
+
+                const risultatibox = document.createElement('div');
+                risultatibox.className = 'risultatibox';
+
+                const mappaBUL = document.createElement('p');
+                mappaBUL.innerHTML = `<a href="https://bandaultralarga.italia.it/mappa/?entity=${comuneId}" target="_blank" style="font-weight: bold;">Mappa BUL</a>`;
+                risultatibox.appendChild(mappaBUL);
+
+                const consultazioniResponse = await fetch(`https://mappatura.amennillo.eu/egon?id=${civicoId}`);
+                const consultazioniData = await consultazioniResponse.json();
+
+                if (consultazioniData === null) {
+                    coloreArea = document.createElement('p');
+                    coloreArea.innerHTML = `<b>Colore Area:</b> <div class="color-b"></div>`;
+                    risultatibox.appendChild(coloreArea);
+                } else {
+                    coloreArea = document.createElement('p');
+                    coloreArea.innerHTML = `<b>Colore Area:</b> <div class="color-${consultazioniData.color}"></div>`;
+                    risultatibox.appendChild(coloreArea);
+                }
+
+                if (consultazioniData === null) {
+                    const bandoGiga = document.createElement('p');
+                    bandoGiga.innerHTML = `<b>Piano Italia 1 Giga:</b> <span class="bando-false">False</span>`;
+                    risultatibox.appendChild(bandoGiga);
+                } else {
+                    const bandoGiga = document.createElement('p');
+                    bandoGiga.innerHTML = `<b>Piano Italia 1 Giga:</b> <span class="bando-${consultazioniData.bando1Giga ? 'true' : 'false'}">${consultazioniData.bando1Giga ? 'True' : 'False'}</span>`;
+                    risultatibox.appendChild(bandoGiga);
+                    const vincitorebando = document.createElement('p');
+                    if (consultazioniData.bando1Giga > 0) {
+                        vincitorebandoconverter = { 1: 'Open Fiber', 2: 'FiberCop' }
+                        vincitorebando.innerHTML = `<b>Vincitore Bando:</b> <span class="bando-${consultazioniData.bando1Giga}">${vincitorebandoconverter[consultazioniData.bando1Giga]}</span>`;
+                        risultatibox.appendChild(vincitorebando);
+                    }
+                    const peakSpeed = document.createElement('p');
+                    peakSpeed.innerHTML = `<b>Peak Speed:</b> <span>${consultazioniData.peakSpeed}</span>`;
+                    risultatibox.appendChild(peakSpeed);
+                }
+                consultazioniDiv.appendChild(risultatibox);
+        }
+
+    </script>
+</body>
+
+</html>
