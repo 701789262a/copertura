@@ -44,6 +44,34 @@
             margin-top: 39px;
         }
 
+        .adiacenzetablediv {
+            display: none;
+            text-align: center;
+        }
+
+        .adiacenzetablediv h4 {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .adiacenzetable {
+            display: table;
+            text-align: center;
+            table-layout: fixed;
+            width: 600px;
+            margin-top: 10px;
+            border: 1px solid #859ac7;
+            background-color: #b4ccff;
+            margin-bottom: 10px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 20px;
+        }
+
+
+        /* #adiacenzetable tr {
+            line-height: 50px;
+        } */
+
         button {
             cursor: pointer;
         }
@@ -51,6 +79,18 @@
         .copiaegon {
             cursor: pointer;
             text-decoration: underline;
+        }
+
+        .tableegon {
+            width: 20px;
+        }
+
+        .tablestato {
+            width: 15px;
+        }
+
+        .tableindirizzo {
+            width: 200px;
         }
 
         .results {
@@ -91,7 +131,7 @@
         }
 
         .id {
-            font-weight: extra-light;
+            font-weight: 200;
             font-size: 15px;
         }
 
@@ -257,26 +297,7 @@
             display: none;
         }
 
-        .adiacenze {
-            margin-top: 10px;
-            border: 1px solid #859ac7;
-            background-color: #b4ccff;
-            margin-bottom: 10px;
-            padding: 10px 10px 10px 10px;
-            border-radius: 20px;
-            display: none;
-        }
 
-        .adiacenzetable {
-            display: none;
-            text-align: center;
-            table-layout: fixed;
-            width: 600px;
-        }
-
-        .adiacenzetable tr {
-            line-height: 14px;
-        }
 
         .eolotable {
             margin-top: 10px;
@@ -293,6 +314,7 @@
 
         .tableid {
             width: 48px;
+            cursor: pointer;
         }
 
         .tablemetri {
@@ -486,7 +508,8 @@
             height: 12px;
             width: 12px;
             border-radius: 50%;
-            text-align: center;
+            vertical-align: center;
+            margin-left: 13px;
         }
 
         .statocivico-DISPONIBILE {
@@ -494,7 +517,8 @@
             height: 12px;
             width: 12px;
             border-radius: 50%;
-            text-align: center;
+            vertical-align: center;
+            margin-left: 13px;
         }
 
         .statocivico-PROGRAMMATO {
@@ -502,7 +526,8 @@
             height: 12px;
             width: 12px;
             border-radius: 50%;
-            text-align: center;
+            vertical-align: center;
+            margin-left: 13px;
         }
 
         .statocivico-NON {
@@ -707,14 +732,15 @@
         <div class="fibercop">Copertura FiberCop</div>
         <div class="fibercop-result" id="fibercop-result"></div>
 
-        <div class="adiacenze" id="adiacenze">
+        <div class="adiacenzetablediv" id="adiacenzetablediv">
+            <h4 onclick="mostraadiacenze()">Civici FC Vicinanze</h4>
             <table class="adiacenzetable" id="adiacenzetable">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th class="tableegon"></th>
                         <th>Comune</th>
-                        <th>Indirizzo</th>
-                        <th>Stato</th>
+                        <th class="tableindirizzo">Indirizzo</th>
+                        <th class="tablestato">Stato</th>
                         <th>Tipo</th>
                         <th>Distanza</th>
                     </tr>
@@ -724,6 +750,7 @@
                 </tbody>
             </table>
         </div>
+
 
         <div class="edr" id="edr">
             <a href="javascript:void(0);" class="click" onclick="edr()">
@@ -858,7 +885,7 @@
 
                         const fastwebDiv = document.getElementById('fastweb-result');
                         fastwebDiv.innerHTML = '';
-
+                        document.getElementById("adiacenzetablediv").style.display = "none"
                         const coperturaDiv = document.getElementById('copertura-result');
                         coperturaDiv.innerHTML = '';
                         const coperturaHeader = document.querySelector('.copertura');
@@ -895,7 +922,6 @@
                         document.getElementById('eoloGtable').getElementsByTagName('tbody')[0].innerHTML = '';
 
                         document.getElementById('adiacenzetable').getElementsByTagName('tbody')[0].innerHTML = '';
-                        document.getElementById("adiacenze").style.display = "none";
 
                         document.getElementById("eolotable").style.display = "none";
                         document.getElementById("eoloGtable").style.display = "none";
@@ -952,7 +978,7 @@
 
                         const eoloDiv = document.getElementById('eolo-result');
                         eoloDiv.innerHTML = '';
-
+                        document.getElementById("adiacenzetablediv").style.display = "none"
                         const geocodeDiv = document.getElementById('geocode-result');
                         geocodeDiv.innerHTML = '';
 
@@ -977,7 +1003,6 @@
                         document.getElementById("eoloGtable").style.display = "none";
 
                         document.getElementById('adiacenzetable').getElementsByTagName('tbody')[0].innerHTML = '';
-                        document.getElementById("adiacenze").style.display = "none";
 
                         document.getElementById("edr").style.display = "none";
 
@@ -1038,7 +1063,7 @@
 
                 const geocodeDiv = document.getElementById('geocode-result');
                 geocodeDiv.innerHTML = '';
-
+                document.getElementById("adiacenzetablediv").style.display = "none"
                 const eoloDiv = document.getElementById('eolo-result');
                 eoloDiv.innerHTML = '';
 
@@ -1060,8 +1085,7 @@
                 document.getElementById("arcolink").style.display = "none";
                 document.getElementById("arcolink-result").style.display = "none";
 
-                document.getElementById('adiacenzetable').innerHTML = '';
-                document.getElementById("adiacenze").style.display = "none";
+                document.getElementById('adiacenzetable').getElementsByTagName('tbody')[0].innerHTML = '';
 
                 const rameDiv = document.getElementById('rame-result');
                 rameDiv.innerHTML = '';
@@ -1080,6 +1104,7 @@
 
             }
             var dataItem
+            var comuneperadiacenze
             async function verificaCopertura() {
 
                 const responsetoken = await fetch('https://coperturaapi.zeromist.net/token', { // codice per ricevere il token API di fiber-map (che cambia ogni 3h)
@@ -2100,6 +2125,8 @@
 
             async function vicinanzefc() {
                 console.log("coord fc: ", coordinatefc)
+                comunefc = document.getElementById("comune").value.split("(")[0].replace(" ", "")
+                console.log("comune tagliato: ", comunefc)
                 const vicinanzeof = await fetch('https://coperturaapi.zeromist.net/fibercop', {
                     method: 'POST',
                     headers: {
@@ -2107,33 +2134,15 @@
                     },
                     body: new URLSearchParams({
                         action: "search_neighbor_coverage",
-                        coords: coordinatefc
+                        city: comunefc,
+                        coords: coordinatefc,
                     })
                 });
                 const vicinanzedata = await vicinanzeof.json();
                 console.log(vicinanzedata)
 
-                document.getElementById("adiacenze").style.display = "block";
-                document.getElementById("adiacenzetable").style.display = "block";
-
-                const adiacenzeDiv = document.getElementById("adiacenze");
-
-                const risultatibox = document.createElement('div');
-                risultatibox.className = 'risultatibox';
-
-                const titoload = document.createElement('div');
-                titoload.innerHTML = `<b class="sottotitolo" onclick="mostraadiacenze()">Civici nelle Vicinanze coperti da FiberCop</b>`;
-                risultatibox.appendChild(titoload);
-
-                adiacenzeDiv.appendChild(risultatibox);
-
+                document.getElementById("adiacenzetablediv").style.display = "block"
                 const adiacenzetableBody = document.querySelector("#adiacenzetable tbody");
-                const tableHeader = document.querySelector("#adiacenzetable thead");
-
-                if (!adiacenzetableBody) {
-                    console.error("Table body is null. Ensure that the table structure is correct.");
-                    return;
-                }
 
                 if (vicinanzedata.length > 0) {
                     vicinanzedata.forEach(item => {
@@ -2143,22 +2152,17 @@
                         const distanza = item.distance_in_km * 1000;
                         const distanzaok = Math.round(distanza * 1000) / 1000;
                         row.innerHTML = `
-                        <td class="copiaegon"><p onclick="copiaegon(${egon});">EGON</p></td>
+                        <td class="copiaegon"><p onclick="copiaegon(${egon});">EG</p></td>
                         <td>${item.city}</td>
-                        <td>${item.full_street_name}</td>
+                        <td><a href="https://www.google.com/maps/place/${item.lat},${item.lng}" target="_blank">${item.full_street_name}</a></td>
                         <td><p class="statocivico-${item.stato_copertura}"></p></td>
                         <td>${tipo}</td>
                         <td>${distanzaok}m</td>`;
                         adiacenzetableBody.appendChild(row);
                     });
 
-                    adiacenzeDiv.appendChild(tableHeader);
-                    adiacenzeDiv.appendChild(adiacenzetableBody);
                 } else {
-                    const avviso = document.createElement('div');
-                    avviso.innerHTML = `<p>Nessun civico coperto</p>`;
-                    risultatibox.appendChild(avviso);
-                    adiacenzeDiv.appendChild(risultatibox);
+                    console.log("No civici fc nelle vicinanze")
                 }
 
             }
@@ -2181,7 +2185,7 @@
                 var tabella = document.getElementById("adiacenzetable");
                 if (tabella.style.display === "none") {
                     console.log("tabella mostrata");
-                    tabella.style.display = "block";
+                    tabella.style.display = "table";
                 } else {
                     console.log("tabella nascosta");
                     tabella.style.display = "none";
