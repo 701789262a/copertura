@@ -66,15 +66,14 @@
             margin-top: 10px;
             border: 1px solid #859ac7;
             background-color: #b4ccff;
-            margin-bottom: 10px;
             padding: 10px 10px 10px 10px;
             border-radius: 20px;
         }
 
 
-        /* #adiacenzetable tr {
-            line-height: 50px;
-        } */
+        .adiacenzetable td {
+            height: 25px;
+        }
 
         button {
             cursor: pointer;
@@ -90,11 +89,15 @@
         }
 
         .tablestato {
-            width: 15px;
+            width: 45px;
         }
 
         .tableindirizzo {
-            width: 200px;
+            width: 270px;
+        }
+
+        .taletipo {
+            width: 37px;
         }
 
         .results {
@@ -134,7 +137,7 @@
             font-size: Medium;
             width: 30%;
             display: block;
-            margin: 4px auto auto auto;
+            margin: auto auto auto auto;
             font-family: Poppins;
             color: white;
         }
@@ -770,7 +773,7 @@
                         <th>Comune</th>
                         <th class="tableindirizzo">Indirizzo</th>
                         <th class="tablestato">Stato</th>
-                        <th>Tipo</th>
+                        <th class="tabletipo">Tipo</th>
                         <th>Distanza</th>
                     </tr>
                 </thead>
@@ -2267,6 +2270,7 @@
                         <td>${distanzaok}m</td>`;
                     adiacenzetableBody.appendChild(row);
                 });
+                document.getElementById('adiacenzetablediv').scrollIntoView();
 
             } else {
                 console.log("No civici fc nelle vicinanze")
@@ -2307,6 +2311,7 @@
                         allMarkers.push(adiacenze_marker);
 
                 });
+                document.getElementById('map').scrollIntoView();
             } else { }
         }
 
