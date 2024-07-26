@@ -524,15 +524,6 @@
             margin-left: 13px;
         }
 
-        .statocivico-DISPONIBILE {
-            background-color: rgb(29, 163, 47);
-            height: 12px;
-            width: 12px;
-            border-radius: 50%;
-            vertical-align: center;
-            margin-left: 13px;
-        }
-
         .statocivico-PROGRAMMATO {
             background-color: rgb(255, 252, 58);
             height: 12px;
@@ -548,14 +539,7 @@
             width: 12px;
             border-radius: 50%;
             text-align: center;
-        }
-
-        .DISPONIBILE {
-            background-color: rgb(255, 84, 84);
-            height: 12px;
-            width: 12px;
-            border-radius: 50%;
-            text-align: center;
+            margin-left: 13px;
         }
 
         .stato-101 {
@@ -759,7 +743,7 @@
 
         <div class="adiacenzetablediv" id="adiacenzetablediv">
             <h4 onclick="mostraadiacenze()">Civici FC Vicinanze</h4>
-            <button class="tastofcmappa" onclick="vicinanzemappa()">Mostra in Mappa</button>
+            <button class="tastofcmappa" id="tastofcmappa" onclick="vicinanzemappa()">Mostra in Mappa</button>
             <table class="adiacenzetable" id="adiacenzetable">
                 <thead>
                     <tr>
@@ -2303,6 +2287,10 @@
                     allMarkers.push(adiacenze_marker);
 
                 });
+                var tabella = document.getElementById("adiacenzetable");
+                tabella.style.display = "none";
+                var tasto = document.getElementById("tastofcmappa");
+                tasto.style.display = "none";
                 document.getElementById('map').scrollIntoView();
             } else { }
         }
