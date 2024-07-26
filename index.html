@@ -10,6 +10,7 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/esri-leaflet@2.0.6"></script>
     <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=256&id=Y6AAeSVIcpWt&format=png">
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
@@ -496,13 +497,6 @@
             padding: 2px 5px;
         }
 
-        .ATTIVO {
-            /* lo "stato-NON ATTIVO" ha uno spazio e quindi per il css sono due classi diverse*/
-            background-color: rgb(255, 86, 86);
-            display: inline-block;
-            padding: 2px 5px;
-        }
-
         .stato-PIANIFICATO {
             background-color: rgb(255, 179, 38);
             display: inline-block;
@@ -687,7 +681,7 @@
     </style>
 </head>
 
-<body>
+<body id="body">
     <div class="container">
         <h1>Verifica Copertura Fibra Ottica</h1>
 
@@ -852,6 +846,7 @@
 
 
     <script>
+        document.getElementById('body').scrollIntoView();
         let comuneId = null;
         let indirizzoId = null;
         let civicoId = null;
@@ -1150,7 +1145,7 @@
         var dataItem
         var comuneperadiacenze
 
-
+        var eolozeromist
         async function verificaCopertura() {
 
             const responsetoken = await fetch('https://coperturaapi.zeromist.net/token', { // codice per ricevere il token API di fiber-map (che cambia ogni 3h)
@@ -1422,6 +1417,7 @@
                     }
                 });
 
+
                 const tableBody = document.querySelector("#eolotable tbody");
                 const tableGBody = document.querySelector("#eoloGtable tbody");
                 const risultatibox = document.createElement('div');
@@ -1630,6 +1626,7 @@
                 fttcData.forEach(item => {
                     const risultatibox = document.createElement('div');
                     risultatibox.className = 'risultatibox';
+                    console.log("stato fttc:", item.status)
 
                     const titoloFTTC = document.createElement('div');
                     if (item.data.hasOwnProperty('edr_info')) {
@@ -1640,7 +1637,6 @@
                         }
                     } else {
                         var tipoFMR = "FTTC"
-
                     }
 
                     titoloFTTC.innerHTML = `<p class="sottotitolo2">${tipoFMR}</p>`;
@@ -1665,17 +1661,15 @@
                         velocita.innerHTML += `<p class="vel-vdsl"> ${item.data.velocita_dettaglio.download.fttc}/${item.data.velocita_dettaglio.upload.fttc}</p>`;
                         velocita.innerHTML += ` <p class="vel-evdsl">${item.data.velocita_dettaglio.download.evdsl}/${item.data.velocita_dettaglio.upload.evdsl}</p>`;
                         risultatibox.appendChild(velocita);
+                        var arlicon = L.icon({
+                            iconUrl: "images/arl.png",
+                        })
+                        var arl_marker = L.marker([item.data.edr_info.lat, item.data.edr_info.lng], { icon: arlicon }).addTo(map)
+                            .bindPopup(item.data.edr + "<br> Maxspeed: " + item.data.maxspeed);
+                        allMarkers.push(arl_marker);
                     }
-
-                    var arlicon = L.icon({
-                        iconUrl: "images/arl.png",
-                    })
-                    var arl_marker = L.marker([item.data.edr_info.lat, item.data.edr_info.lng], { icon: arlicon }).addTo(map)
-                        .bindPopup(item.data.edr + "<br> Maxspeed: " + item.data.maxspeed);
-                    allMarkers.push(arl_marker);
-
-
                     fibercopDiv.appendChild(risultatibox);
+
                 });
 
             } catch (TypeError) {
@@ -1967,7 +1961,7 @@
                         })
                         var centrale_marker = L.marker([ogg.data.edr_info.lat, ogg.data.edr_info.lng], { icon: centraleicon }).addTo(map)
                             .bindPopup(ogg.data.edr_info.nome_sede_gat + " - " + ogg.data.edr_info.codice_clli);
-                            allMarkers.push(centrale_marker);
+                        allMarkers.push(centrale_marker);
 
                         if (dati == null) {
                             centrale_rame === "aa"
@@ -2053,7 +2047,7 @@
                             })
                             var centrale_marker = L.marker([item4.data.edr_info.lat, item4.data.edr_info.lng], { icon: centraleicon }).addTo(map)
                                 .bindPopup("OLT di Riferimento\n" + item4.data.edr_info.nome_sede_gat + " - " + item4.data.edr_info.codice_clli);
-                                allMarkers.push(centrale_marker);
+                            allMarkers.push(centrale_marker);
 
                         } else { }
                     });
@@ -2102,15 +2096,13 @@
                         })
                         var arcolink_marker = L.marker([dataItem.lat, dataItem.lng], { icon: arcolinkicon }).addTo(map)
                             .bindPopup(dataItem.id + " - " + dataItem.nome);
-                            allMarkers.push(arcolink_marker);
+                        allMarkers.push(arcolink_marker);
 
                     });
                     arcolinkDiv.appendChild(risultatibox);
                 });
 
             } catch (error) { }
-
-
 
             const consultazioniDiv = document.getElementById('consultazioni-result');
             consultazioniDiv.innerHTML = '';
@@ -2204,7 +2196,7 @@
         }
 
         async function geocodingof(formattedCoordinates) {
-            console.log("coordinate of: ",formattedCoordinates)
+            console.log("coordinate of: ", formattedCoordinates)
             try {
 
                 const geocodeDiv = document.getElementById('geocode-result');
@@ -2308,7 +2300,7 @@
                     }
                     var adiacenze_marker = L.marker([item.lat, item.lng], { icon: adiacenzeicon }).addTo(map)
                         .bindPopup(item.full_street_name + ", " + item.city + "\n - " + item.stato_copertura);
-                        allMarkers.push(adiacenze_marker);
+                    allMarkers.push(adiacenze_marker);
 
                 });
                 document.getElementById('map').scrollIntoView();
@@ -2326,6 +2318,9 @@
             } else {
                 riganascosta.style.display = "none";
             }
+            coordsplit = coordinatefc.split("|");
+            lat = coordsplit[0]
+            lng = coordsplit[1]
         }
 
         function mostraadiacenze() {
@@ -2346,14 +2341,18 @@
         var lyr_osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
         });
+        var lyr_arcgis = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png', {
+            maxZoom: 19,
+        });
         var map = L.map('map', {
             center: [41.89575276892449, 12.34428460388478],
             zoom: 5,
-            layers: [lyr_satellite, lyr_osm]
+            layers: [lyr_satellite, lyr_osm, lyr_arcgis]
         });
         var baseMaps = {
             "OSM": lyr_osm,
-            "Satellite": lyr_satellite
+            "ARCGIS": lyr_arcgis,
+            "Satellite": lyr_satellite,
         };
         L.control.layers(baseMaps).addTo(map);
 
