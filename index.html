@@ -2218,12 +2218,12 @@
                 coordinatefc = formattedCoordinates.replace(', ', '|')
                 const coordinateofmap = formattedCoordinates.split(', ').map(Number);
 
-                map.flyTo([coordinateofmap], 15);
+                map.flyTo(coordinateofmap, 15);
 
                 var civicoicon = L.icon({
                     iconUrl: "images/casa.png"
                 })
-                var civico = L.marker([coordinateofmap], { icon: civicoicon }).addTo(map);
+                var civico = L.marker(coordinateofmap, { icon: civicoicon }).addTo(map);
             }
             catch (TypeError) {
                 console.log("ERRORE", TypeError)
