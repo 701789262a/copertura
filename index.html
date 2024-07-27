@@ -1346,7 +1346,7 @@
                         const statoColorClass2 = `stato-${item.data.stato_palazzo}`;
                         idbuilding.innerHTML = `<span>ID BUILDING:</span> ${item.data.id_building}`;
                         if (item.data.stato_palazzo) {
-                            idbuilding.innerHTML += ` <span class="stato-${statoColorClass2} stato-scala">${item.data.stato_palazzo}</span>`;
+                            idbuilding.innerHTML += ` <span class="${statoColorClass2} stato-scala">${item.data.stato_palazzo}</span>`;
                         }
                         risultatibox.appendChild(idbuilding);
 
