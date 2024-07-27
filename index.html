@@ -1197,6 +1197,7 @@
                         coperturaHeader.innerHTML = `Copertura Open Fiber ( Dati aggiornati al: ${updateDate})`;
                         var scalaCounter = 0;
                         var formattedCoordinates
+                        var indirizzoof
                         openFiberData.forEach(item => {
                             const risultatibox = document.createElement('div');
                             risultatibox.className = 'risultatibox';
@@ -1268,8 +1269,11 @@
                             } else {
                                 x.style.display = "block";
                             }
+
+                            indirizzoof = item.PARTICELLA_TOP + " " + item.INDIRIZZO + ", " + item.CIVICO + " - " + item.FRAZIONE
+                            console.log("indirizzoof:",indirizzoof)
                         });
-                        geocodingof(formattedCoordinates)
+                        geocodingof(formattedCoordinates, indirizzoof)
                     } else {
                         geocoding()
                         const coperturaDiv = document.getElementById('copertura-result');
@@ -2179,8 +2183,8 @@
             }
         }
 
-        async function geocodingof(formattedCoordinates) {
-            console.log("coordinate of: ", formattedCoordinates)
+        async function geocodingof(formattedCoordinates, indirizzoof) {
+            console.log("coordinate of: ", indirizzoof)
             try {
 
                 const geocodeDiv = document.getElementById('geocode-result');
@@ -2202,7 +2206,9 @@
                 var civicoicon = L.icon({
                     iconUrl: "images/casa.png"
                 })
-                var civico = L.marker(coordinateofmap, { icon: civicoicon }).addTo(map);
+                var civico_marker = L.marker(coordinateofmap, { icon: civicoicon }).addTo(map)
+                    .bindPopup(indirizzoof);;
+                allMarkers.push(civico_marker);
             }
             catch (TypeError) {
                 console.log("ERRORE", TypeError)
