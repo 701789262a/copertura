@@ -497,6 +497,17 @@
             padding: 2px 5px;
         }
 
+        .stato-NON_COPERTO {
+            background-color: rgb(255, 86, 86);
+            display: inline-block;
+            padding: 2px 5px;
+        }
+        .stato-NON_VENDIBILE {
+            background-color: rgb(255, 86, 86);
+            display: inline-block;
+            padding: 2px 5px;
+        }
+
         .stato-PIANIFICATO {
             background-color: rgb(255, 179, 38);
             display: inline-block;
@@ -560,6 +571,10 @@
 
         .stato-105 {
             background-color: lightcoral;
+        }
+        .stato-prevendita {
+            background-color: red;
+            padding: 2px 5px;
         }
 
         .stato-106 {
@@ -1307,7 +1322,7 @@
                             prevendibilita = "PCN NON RILEGATO";
                         }
                         const prevend = document.createElement('p');
-                        prevend.innerHTML = `<span>ATTENZIONE: </span><span class="stato-105">${prevendibilita}</span>`;
+                        prevend.innerHTML = `<span class="stato-prevendita">${prevendibilita}</span>`;
                         risultatibox.appendChild(prevend);
 
                         coperturaDiv.appendChild(risultatibox);
@@ -1356,7 +1371,7 @@
 
                         if (item.data.notices != null) {
                             const prevendibilita = document.createElement('p');
-                            prevendibilita.innerHTML = `<span style="background-color: red">PCN NON RILEGATO</span>`;
+                            prevendibilita.innerHTML = `<span class="stato-prevendita">PCN NON RILEGATO</span>`;
                             risultatibox.appendChild(prevendibilita);
                         } else {
                         }
@@ -2281,17 +2296,17 @@
                         var adiacenzeicon = L.icon({
                             iconUrl: "images/programmato_p1g.png"
                         })
-                    } else if (item.stato_copertura === "SOSPESO" && item.descrizione == null) {
+                    } else if (item.stato_copertura === "NON DISPONIBILE ALL'UTILIZZO" && item.descrizione == null) {
                         var adiacenzeicon = L.icon({
                             iconUrl: "images/sospeso.png"
                         })
-                    } else if (item.stato_copertura === "SOSPESO" && item.descrizione != null) {
+                    } else if (item.stato_copertura === "NON DISPONIBILE ALL'UTILIZZO" && item.descrizione != null) {
                         var adiacenzeicon = L.icon({
                             iconUrl: "images/sospeso_p1g.png"
                         })
                     }
                     var adiacenze_marker = L.marker([item.lat, item.lng], { icon: adiacenzeicon }).addTo(map)
-                        .bindPopup(item.full_street_name + ", " + item.city + "\n - " + item.stato_copertura);
+                        .bindPopup(item.full_street_name + ", " + item.city + " - " + "<em>" + item.stato_copertura + "</em>");
                     allMarkers.push(adiacenze_marker);
 
                 });
