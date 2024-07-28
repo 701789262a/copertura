@@ -1255,7 +1255,6 @@
                         coperturaHeader.innerHTML = `Copertura Open Fiber ( Dati aggiornati al: ${updateDate})`;
                         var scalaCounter = 0;
                         var formattedCoordinates
-                        var indirizzoof
                         openFiberData.forEach(item => {
                             const risultatibox = document.createElement('div');
                             risultatibox.className = 'risultatibox';
@@ -1328,10 +1327,8 @@
                                 x.style.display = "block";
                             }
 
-                            indirizzoof = item.PARTICELLA_TOP + " " + item.INDIRIZZO + ", " + item.CIVICO + " - " + item.FRAZIONE
-                            console.log("indirizzoof:", indirizzoof)
                         });
-                        geocodingof(formattedCoordinates, indirizzoof)
+                        geocodingof(formattedCoordinates,)
                     } else {
                         geocoding()
                         const coperturaDiv = document.getElementById('copertura-result');
@@ -2254,8 +2251,7 @@
             }
         }
 
-        async function geocodingof(formattedCoordinates, indirizzoof) {
-            console.log("coordinate of: ", indirizzoof)
+        async function geocodingof(formattedCoordinates) {
             try {
 
                 const geocodeDiv = document.getElementById('geocode-result');
@@ -2286,11 +2282,15 @@
 
                 map.flyTo(coordinateofmap, 15);
 
+                comune_geo = document.getElementById("comune").value;
+                indirizzo_geo = document.getElementById("indirizzo").value;
+                civico_geo = document.getElementById("civico").options[document.getElementById("civico").selectedIndex].text;
+
                 var civicoicon = L.icon({
                     iconUrl: "images/casa.png"
                 })
                 var civico_marker = L.marker(coordinateofmap, { icon: civicoicon }).addTo(map)
-                    .bindPopup(indirizzoof);;
+                    .bindPopup(indirizzo_geo + " " + civico_geo + " - " + comune_geo);
                 allMarkers.push(civico_marker);
             }
             catch (TypeError) {
