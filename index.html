@@ -1190,6 +1190,11 @@
         var eolozeromist
         async function verificaCopertura() {
 
+
+            document.getElementById('eolotable').getElementsByTagName('tbody')[0].innerHTML = '';
+            document.getElementById('eoloGtable').getElementsByTagName('tbody')[0].innerHTML = '';
+            document.getElementById('arcolinktable').getElementsByTagName('tbody')[0].innerHTML = '';
+
             const responsetoken = await fetch('https://coperturaapi.zeromist.net/token', { // codice per ricevere il token API di fiber-map (che cambia ogni 3h)
                 method: 'GET',
                 headers: {
