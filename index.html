@@ -28,6 +28,7 @@
             margin: auto;
         }
 
+
         .form-group {
             margin-bottom: 15px;
         }
@@ -178,6 +179,23 @@
             border-radius: 20px;
         }
 
+        .mobile {
+            margin-top: 20px;
+            font-weight: bold;
+            background-color: #46d7d7;
+            padding: 10px;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .mobile-result {
+            margin-top: 10px;
+            border: 1px solid #7bbebe;
+            background-color: #96eeee;
+            padding: 10px;
+            border-radius: 20px;
+        }
+
         .copertura {
             margin-top: 20px;
             font-weight: bold;
@@ -225,7 +243,7 @@
 
         .rame-result {
             margin-top: 10px;
-            border: 1px solid #cc797d;
+            border: 1px solid #dd8e92;
             background-color: #d1b8b9;
             margin-bottom: 10px;
             padding: 10px 10px 10px 10px;
@@ -502,6 +520,7 @@
             display: inline-block;
             padding: 2px 5px;
         }
+
         .stato-NON_VENDIBILE {
             background-color: rgb(255, 86, 86);
             display: inline-block;
@@ -572,6 +591,7 @@
         .stato-105 {
             background-color: lightcoral;
         }
+
         .stato-prevendita {
             background-color: red;
             padding: 2px 5px;
@@ -663,6 +683,26 @@
             background-color: blue;
             color: white;
             padding: 2px 5px;
+        }
+
+        .lteitaly-link {
+            padding-left: 4px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            /* Rimuove la sottolineatura dal link */
+        }
+
+        .icon-lteitaly {
+            width: 28px;
+            margin-right: 10px;
+        }
+
+        .lteitaly-link span {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 28px;
+            /* Allinea verticalmente il testo */
         }
 
         #map {
@@ -822,6 +862,9 @@
         </div>
         <div class="rame">Copertura Rame</div>
         <div class="rame-result" id="rame-result"></div>
+
+        <div class="mobile">Copertura 4G/5G</div>
+        <div class="mobile-result" id="mobile-result"></div>
 
         <div class="arcolink" id="arcolink">Copertura ArcoLink</div>
         <div class="arcolink-result" id="arcolink-result"></div>
@@ -1286,7 +1329,7 @@
                             }
 
                             indirizzoof = item.PARTICELLA_TOP + " " + item.INDIRIZZO + ", " + item.CIVICO + " - " + item.FRAZIONE
-                            console.log("indirizzoof:",indirizzoof)
+                            console.log("indirizzoof:", indirizzoof)
                         });
                         geocodingof(formattedCoordinates, indirizzoof)
                     } else {
@@ -2191,6 +2234,19 @@
                 coordinatefc = `${geoData.candidates[0].location.y}|${geoData.candidates[0].location.x}`
 
                 geocodeDiv.appendChild(risultatibox);
+
+                const mobileDiv = document.getElementById('mobile-result');
+                mobileDiv.innerHTML = '';
+
+                const risultatibox2 = document.createElement('div');
+                risultatibox2.className = 'risultatibox';
+
+                link = document.createElement('p');
+                link.innerHTML = `<a href="https://lteitaly.it/it/internal/map.php#15/${geoData.candidates[0].location.y}/${geoData.candidates[0].location.x}" class="lteitaly-link" target="_blank"><img class="icon-lteitaly" src="https://i.imgur.com/hhlpY2X.png"><span>Vai a LTEItaly</span></a>`;
+                risultatibox2.appendChild(link);
+
+                mobileDiv.appendChild(risultatibox2);
+
                 mappa(geoData)
             }
             catch (TypeError) {
@@ -2215,6 +2271,18 @@
                 geocodeDiv.appendChild(risultatibox);
                 coordinatefc = formattedCoordinates.replace(', ', '|')
                 const coordinateofmap = formattedCoordinates.split(', ').map(Number);
+
+                const mobileDiv = document.getElementById('mobile-result');
+                mobileDiv.innerHTML = '';
+
+                const risultatibox2 = document.createElement('div');
+                risultatibox2.className = 'risultatibox';
+
+                link = document.createElement('p');
+                link.innerHTML = `<a href="https://lteitaly.it/it/internal/map.php#15/${formattedCoordinates.split(", ")[0]}/${formattedCoordinates.split(", ")[1]}" class="lteitaly-link" target="_blank"><img class="icon-lteitaly" src="https://i.imgur.com/hhlpY2X.png"><span>Vai a LTEItaly</span></a>`;
+                risultatibox2.appendChild(link);
+
+                mobileDiv.appendChild(risultatibox2);
 
                 map.flyTo(coordinateofmap, 15);
 
