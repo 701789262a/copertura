@@ -739,7 +739,8 @@
 
         <div class="form-group" id="civico-group" style="display: none;">
             <label for="civico">Civico: <span class="id" id="civico-id"></span></label>
-            <select class="input" id="civico" onclick="selezionaCivico()"></select>
+            <select class="input" id="civico">
+            </select>
         </div>
 
         <div class="form-group" id="verifica-group" style="display: none;">
@@ -964,6 +965,14 @@
                     const consultazioniDiv = document.getElementById('consultazioni-result');
                     consultazioniDiv.innerHTML = '';
 
+                    const mobileDiv = document.getElementById('mobile-result');
+                    mobileDiv.innerHTML = '';
+
+                    var x = document.getElementById('statiOF');
+                    if (x.style.display === "block") {
+                        x.style.display = "none";
+                    }
+
                     const eoloDiv = document.getElementById('eolo-result');
                     eoloDiv.innerHTML = '';
 
@@ -1051,11 +1060,19 @@
                     const coperturaHeader = document.querySelector('.copertura');
                     coperturaHeader.innerHTML = `Copertura Open Fiber`;
 
+                    const mobileDiv = document.getElementById('mobile-result');
+                    mobileDiv.innerHTML = '';
+
                     const eoloDiv = document.getElementById('eolo-result');
                     eoloDiv.innerHTML = '';
                     document.getElementById("adiacenzetablediv").style.display = "none"
                     const geocodeDiv = document.getElementById('geocode-result');
                     geocodeDiv.innerHTML = '';
+
+                    var x = document.getElementById('statiOF');
+                    if (x.style.display === "block") {
+                        x.style.display = "none";
+                    }
 
                     const rameDiv = document.getElementById('rame-result');
                     rameDiv.innerHTML = '';
@@ -1127,6 +1144,10 @@
             document.getElementById('verifica-group').style.display = 'block';
         }
 
+        document.getElementById('civico').addEventListener('change', function () {
+            selezionaCivico();
+        });
+
         function selezionaCivico() {
             const fastwebDiv = document.getElementById('fastweb-result');
             fastwebDiv.innerHTML = '';
@@ -1139,11 +1160,19 @@
             const consultazioniDiv = document.getElementById('consultazioni-result');
             consultazioniDiv.innerHTML = '';
 
+            const mobileDiv = document.getElementById('mobile-result');
+            mobileDiv.innerHTML = '';
+
             const geocodeDiv = document.getElementById('geocode-result');
             geocodeDiv.innerHTML = '';
             document.getElementById("adiacenzetablediv").style.display = "none"
             const eoloDiv = document.getElementById('eolo-result');
             eoloDiv.innerHTML = '';
+
+            var x = document.getElementById('statiOF');
+            if (x.style.display === "block") {
+                x.style.display = "none";
+            }
 
             document.getElementById('eolotable').getElementsByTagName('tbody')[0].innerHTML = '';
             document.getElementById('eoloGtable').getElementsByTagName('tbody')[0].innerHTML = '';
