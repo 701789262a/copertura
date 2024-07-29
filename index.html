@@ -740,6 +740,7 @@
         <div class="form-group" id="civico-group" style="display: none;">
             <label for="civico">Civico: <span class="id" id="civico-id"></span></label>
             <select class="input" id="civico">
+                <option value="" disabled selected>Seleziona un numero</option>
             </select>
         </div>
 
@@ -1129,7 +1130,7 @@
             const data = await response.json();
 
             const civicoSelect = document.getElementById('civico');
-            civicoSelect.innerHTML = '';
+            civicoSelect.innerHTML = '<option value="" disabled selected>Seleziona un numero</option>';
 
             data.results.forEach(result => {
                 const option = document.createElement('option');
