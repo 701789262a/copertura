@@ -705,6 +705,12 @@
             /* Allinea verticalmente il testo */
         }
 
+        .nasconditabella {
+            margin-top: -5px;
+            font-size: 10px;
+            text-decoration: underline;
+        }
+
         #map {
             margin-top: 75px;
             display: block;
@@ -816,6 +822,7 @@
 
                 </tbody>
             </table>
+            <h4 class="nasconditabella" id="nasconditabella" onclick="mostraadiacenze()">Nascondi Tabella</h4>
         </div>
 
 
@@ -2438,14 +2445,18 @@
         }
 
         function mostraadiacenze() {
-            console.log("tabella adiacenze click");
             var tabella = document.getElementById("adiacenzetable");
             if (tabella.style.display === "none") {
-                console.log("tabella mostrata");
                 tabella.style.display = "table";
             } else {
-                console.log("tabella nascosta");
                 tabella.style.display = "none";
+            }
+
+            var tasto = document.getElementById("nasconditabella");
+            if (tasto.style.display === "none") {
+                tasto.style.display = "block";
+            } else {
+                tasto.style.display = "none";
             }
         }
 
