@@ -33,7 +33,6 @@ loginpush.addEventListener('click', (event) => {
         localStorage.setItem('loggedInUserId', user.uid)
         let newtab = document.createElement('a');
         newtab.href = "http://copertura.zeromist.net/";
-        newtab.target = "_blank";
         newtab.click()
     }).catch((error)=>{
         console.log(error)
