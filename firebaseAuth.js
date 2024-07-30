@@ -28,9 +28,10 @@ onAuthStateChanged(auth, (user) => {
         getDoc(docRef)
             .then((docSnap) => {
                 console.log(docSnap)
+                console.log(docSnap.data().email)
                 if (docSnap.exists()) {
                     const userData = docSnap.data();
-                    document.getElementById('email').innerHTML = userData.email;
+                    //document.getElementById('email').innerHTML = userData.email;
                 } else {
                     console.log('no document found matching id')
                     //window.location.replace('http://copertura.zeromist.net/login.html')
