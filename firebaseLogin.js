@@ -19,7 +19,6 @@ const analytics = getAnalytics(app);
 
 var loginpush = document.getElementById("loginpush")
 loginpush.addEventListener('click', (event) => {
-    console.log('porcodio')
     event.preventDefault();
     const email = document.getElementById('emaillogin').value;
     const password = document.getElementById('passwordlogin').value;

@@ -20,7 +20,6 @@ const analytics = getAnalytics(app);
 const auth = getAuth();
 const db = getFirestore();
 onAuthStateChanged(auth, (user) => {
-    console.log('diobobotti')
     const loggedInUserId = localStorage.getItem('loggedInUserId');
     if (loggedInUserId) {
         const docRef = doc(db, 'users', loggedInUserId);
