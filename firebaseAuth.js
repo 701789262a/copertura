@@ -34,16 +34,16 @@ onAuthStateChanged(auth, (user) => {
                     //document.getElementById('email').innerHTML = userData.email;
                 } else {
                     console.log('no document found matching id')
-                    //window.location.replace('http://copertura.zeromist.net/login.html')
+                    window.location.replace('http://copertura.zeromist.net/login.html')
 
                 }
 
             }).catch((error) => {
                 console.log("error getting document")
-                //window.location.replace('http://copertura.zeromist.net/login.html')
+                window.location.replace('http://copertura.zeromist.net/login.html')
             })
     } else {
         console.log('user id not found in local storage')
-        //window.location.replace('http://copertura.zeromist.net/login.html')
+        window.location.replace('http://copertura.zeromist.net/login.html')
     }
 })
