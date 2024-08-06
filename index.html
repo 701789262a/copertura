@@ -11,8 +11,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/esri-leaflet@2.0.6"></script>
-    <script type="module" src = "firebaseAuth.js"></script>
-    
+    <script type="module" src="firebaseAuth.js"></script>
+
 
     <link rel="icon" type="image/x-icon" href="https://img.icons8.com/?size=256&id=Y6AAeSVIcpWt&format=png">
     <link
@@ -754,7 +754,7 @@
         </div>
 
         <div class="form-group" id="verifica-group" style="display: none;">
-            <button class="tasto" onclick="verificaCopertura()">Verifica Copertura</button>
+            <button class="tasto" id="tastoverificacopertura" onclick="verificaCopertura()">Verifica Copertura</button>
         </div>
         <div class="form-group" id="verificafc-group" style="display: none;">
             <button class="tastofc" onclick="vicinanzefc()">Ricerca Civici coperti da FiberCop nelle vicinanze</button>
@@ -1231,6 +1231,7 @@
 
         var eolozeromist
         async function verificaCopertura() {
+            document.getElementById("tastoverificacopertura").disabled = true;
 
 
             document.getElementById('eolotable').getElementsByTagName('tbody')[0].innerHTML = '';
@@ -1284,22 +1285,19 @@
                 }),
             });
             const data = await response.json();
-            console.log(data)
             const coperturaDiv = document.getElementById('copertura-result');
             coperturaDiv.innerHTML = '';
             var openfiberData
             const prevenData = datafibermap.filter(item => item.carrier === "openfiber" && item.technology === "FTTH" && item.status === "ATTIVO");
-            console.log("prevendata: ", prevenData)
             try {
-                console.log("inizio of")
                 if (data.recordFound == null) {
-                    console.log("dati virgin presenti: ", data)
                     openFiberData = data.filter(item => item.channel === "OpenFiber");
-                    console.log("ofdata: ", openFiberData)
                     if (openFiberData.length > 0) {
+                        if(openFiberData[0].UPDATE_DATE) {
                         const updateDate = openFiberData[0].UPDATE_DATE.split('T')[0].split('-').reverse().join('/');
                         const coperturaHeader = document.querySelector('.copertura');
-                        coperturaHeader.innerHTML = `Copertura Open Fiber ( Dati aggiornati al: ${updateDate})`;
+                        coperturaHeader.innerHTML = `Copertura Open Fiber (Dati aggiornati al: ${updateDate})`;
+                        }
                         var scalaCounter = 0;
                         var formattedCoordinates
                         openFiberData.forEach(item => {
@@ -1364,6 +1362,12 @@
                             }
                             risultatibox.appendChild(xgsPon);
 
+                            prevenData.forEach(item => {
+                                const delivery = document.createElement('p');
+                                delivery.innerHTML = `<span>EASY DELIVERY:</span> ${item.data.easy_delivery}`;
+                                risultatibox.appendChild(delivery);
+                            });
+
                             coperturaDiv.appendChild(risultatibox);
                             scalaCounter = scalaCounter + 1;
 
@@ -1383,7 +1387,6 @@
                     }
                 } else if (prevenData.length > 0) {
                     geocoding()
-                    console.log("dati of di fiber-map: ", prevenData)
                     prevenData.forEach(item => {
                         const risultatibox = document.createElement('div');
                         risultatibox.className = 'risultatibox';
@@ -1716,7 +1719,6 @@
                 fttcData.forEach(item => {
                     const risultatibox = document.createElement('div');
                     risultatibox.className = 'risultatibox';
-                    console.log("stato fttc:", item.status)
 
                     const titoloFTTC = document.createElement('div');
                     if (item.data.hasOwnProperty('edr_info')) {
@@ -1971,8 +1973,7 @@
                         ogg = item
                     } else {
                         atmData.forEach(item2 => {
-                            console.log("atmdata2: ", atmData)
-                            if (item2.status === "ATTIVO" || item2.status === "SATURO") {
+                             if (item2.status === "ATTIVO" || item2.status === "SATURO") {
                                 dati = atmData
                                 ogg = item2
                             } else {
@@ -2072,12 +2073,9 @@
                     risultatibox.appendChild(avviso);
                     edrDiv.appendChild(risultatibox);
                 }
-                console.log("conclusa parte rame")
                 if (p2pData != null) {
                     p2pData.forEach(item4 => {
                         if (item4.data.edr_info.codice_clli != centrale_rame) {
-                            console.log("centrali diverse, la olt è", item4.data.edr_info.codice_clli)
-
                             const risultatibox = document.createElement('div');
                             risultatibox.className = 'risultatibox';
 
@@ -2152,8 +2150,6 @@
                 arcolinkDiv.innerHTML = '';
 
                 const arcolinkData = datafibermap.filter(item => item.carrier === "arcolink" && item.technology === "WIRELESS");
-                console.log("Arcolink:", arcolinkData)
-
                 const arcolinktableBody = document.querySelector("#arcolinktable tbody");
                 const risultatibox = document.createElement('div');
                 risultatibox.className = 'risultatibox';
@@ -2201,8 +2197,10 @@
             risultatibox.className = 'risultatibox';
 
             const mappaBUL = document.createElement('p');
-            mappaBUL.innerHTML = `<a href="https://bandaultralarga.italia.it/mappa/?entity=${comuneId}" target="_blank" style="font-weight: bold;">Mappa BUL</a>`;
+            mappaBUL.innerHTML = `<a href="https://bandaultralarga.italia.it/mappa/?entity=${comuneId}" target="_blank" style="font-weight: bold;" class="lteitaly-link"><img class="icon-lteitaly" src="https://bandaultralarga.italia.it/wp-content/themes/accupress/assets/media/favicon.png">Mappa BUL</a>`;
+            mappaBUL.innerHTML += `<a href="https://connetti.italia.it/datasets/comuni/${comuneId}.csv" target="_blank" style="font-weight: bold;" class="lteitaly-link"><img class="icon-lteitaly" src="https://i.imgur.com/kkujNla.png">CSV Connetti</a>`;
             risultatibox.appendChild(mappaBUL);
+
 
             const consultazioniResponse = await fetch(`https://mappatura.amennillo.eu/egon?id=${civicoId}`);
             const consultazioniData = await consultazioniResponse.json();
@@ -2238,6 +2236,7 @@
             consultazioniDiv.appendChild(risultatibox);
 
             document.getElementById('verificafc-group').style.display = 'block';
+            document.getElementById("tastoverificacopertura").disabled = false;
         }
         var coordinatefc;
 
@@ -2248,7 +2247,6 @@
                 civico_geo = document.getElementById("civico").options[document.getElementById("civico").selectedIndex].text;
                 const georequest = await fetch(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=pjson&outFields=Addr_type&forStorage=false&SingleLine=${indirizzo_geo} ${civico_geo} ${comune_geo}`);
                 const geoData = await georequest.json();
-                console.log("coord: ", geoData)
 
                 const geocodeDiv = document.getElementById('geocode-result');
                 geocodeDiv.innerHTML = '';
@@ -2257,10 +2255,9 @@
                 risultatibox.className = 'risultatibox';
 
                 coordinate = document.createElement('p');
-                coordinate.innerHTML = `<b>Coordinate: </b><a href="https://www.google.com/maps/place/${geoData.candidates[0].location.y},${geoData.candidates[0].location.x}" target="_blank">${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}</a>`;
+                coordinate.innerHTML = `<b>Coordinate: </b><a href="comgooglemaps://?q=${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}" onclick="window.location='https://www.google.com/maps/place/${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}'; return false">${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}</a>`;
                 risultatibox.appendChild(coordinate);
 
-                console.log("coord:", geoData.candidates[0].location.y, geoData.candidates[0].location.x)
                 map.flyTo([geoData.candidates[0].location.y, geoData.candidates[0].location.x], 15);
 
 
@@ -2346,9 +2343,7 @@
         }
         var vicinanzedata
         async function vicinanzefc() {
-            console.log("coord fc: ", coordinatefc)
             comunefc = document.getElementById("comune").value.split("(")[0].replace(" ", "")
-            console.log("comune tagliato: ", comunefc)
             const vicinanzeof = await fetch('https://coperturaapi.zeromist.net/fibercop', {
                 method: 'POST',
                 headers: {
@@ -2361,7 +2356,6 @@
                 })
             });
             vicinanzedata = await vicinanzeof.json();
-            console.log(vicinanzedata)
 
             document.getElementById("adiacenzetablediv").style.display = "block"
             document.getElementById("tastofcmappa").style.display = "block"
