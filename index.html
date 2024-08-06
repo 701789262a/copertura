@@ -2255,7 +2255,7 @@
                 risultatibox.className = 'risultatibox';
 
                 coordinate = document.createElement('p');
-                coordinate.innerHTML = `<b>Coordinate: </b><a href="comgooglemaps://?q=${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}" onclick="window.location='https://www.google.com/maps/place/${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}'; return false">${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}</a>`;
+                coordinate.innerHTML = `<b>Coordinate: </b><a href="https://www.google.com/maps/place/${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}">${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}</a>`;
                 risultatibox.appendChild(coordinate);
 
                 map.flyTo([geoData.candidates[0].location.y, geoData.candidates[0].location.x], 15);
