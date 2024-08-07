@@ -400,6 +400,17 @@
             font-weight: bold;
         }
 
+        .GPON {
+            background-color: rgb(223, 145, 0);
+            color: white;
+            padding: 2px 5px;
+        }
+        .XGS-PON {
+            background-color: green;
+            color: white;
+            padding: 2px 5px;
+        }
+
         .yes {
             background-color: green;
             color: white;
@@ -407,6 +418,18 @@
         }
 
         .no {
+            background-color: red;
+            color: white;
+            padding: 2px 5px;
+        }
+
+        .true {
+            background-color: green;
+            color: white;
+            padding: 2px 5px;
+        }
+
+        .false {
             background-color: red;
             color: white;
             padding: 2px 5px;
@@ -770,6 +793,15 @@
         <div class="copertura">Copertura Open Fiber</div>
         <div class="copertura-result" id="copertura-result"></div>
 
+        <div class="statiOF" id="pop">
+            <a href="javascript:void(0);" class="click" onclick="pop()">
+                <i class="sottotitolo">Info Pop</i>
+            </a>
+            <div class="statiOF_interno" id="pop_interno">
+
+            </div>
+        </div>
+
         <div class="statiOF" id="statiOF">
             <a href="javascript:void(0);" class="click" onclick="statiof()">
                 <i class="sottotitolo">Legenda Stati</i>
@@ -966,7 +998,10 @@
                     document.getElementById('civico-group').style.display = 'none';
                     document.getElementById('verifica-group').style.display = 'none';
                     document.getElementById('verificafc-group').style.display = 'none';
-
+                    const infopopDiv = document.getElementById('pop_interno');
+                    infopopDiv.innerHTML = '';
+                    var divpop = document.getElementById('pop');
+                    divpop.style.display = "none";
                     const fastwebDiv = document.getElementById('fastweb-result');
                     fastwebDiv.innerHTML = '';
                     document.getElementById("adiacenzetablediv").style.display = "none"
@@ -1064,7 +1099,10 @@
                     document.getElementById('indirizzo-results').innerHTML = '';
                     document.getElementById('civico').innerHTML = '';
                     document.getElementById('civico-id').textContent = '';
-
+                    const infopopDiv = document.getElementById('pop_interno');
+                    infopopDiv.innerHTML = '';
+                    var divpop = document.getElementById('pop');
+                    divpop.style.display = "none";
                     const fastwebDiv = document.getElementById('fastweb-result');
                     fastwebDiv.innerHTML = '';
 
@@ -1164,7 +1202,10 @@
         function selezionaCivico() {
             const fastwebDiv = document.getElementById('fastweb-result');
             fastwebDiv.innerHTML = '';
-
+            const infopopDiv = document.getElementById('pop_interno');
+            infopopDiv.innerHTML = '';
+            var divpop = document.getElementById('pop');
+            divpop.style.display = "none";
             const coperturaDiv = document.getElementById('copertura-result');
             coperturaDiv.innerHTML = '';
             const coperturaHeader = document.querySelector('.copertura');
@@ -1289,14 +1330,15 @@
             coperturaDiv.innerHTML = '';
             var openfiberData
             const prevenData = datafibermap.filter(item => item.carrier === "openfiber" && item.technology === "FTTH" && item.status === "ATTIVO");
+            var infopop;
             try {
                 if (data.recordFound == null) {
                     openFiberData = data.filter(item => item.channel === "OpenFiber");
                     if (openFiberData.length > 0) {
-                        if(openFiberData[0].UPDATE_DATE) {
-                        const updateDate = openFiberData[0].UPDATE_DATE.split('T')[0].split('-').reverse().join('/');
-                        const coperturaHeader = document.querySelector('.copertura');
-                        coperturaHeader.innerHTML = `Copertura Open Fiber (Dati aggiornati al: ${updateDate})`;
+                        if (openFiberData[0].UPDATE_DATE) {
+                            const updateDate = openFiberData[0].UPDATE_DATE.split('T')[0].split('-').reverse().join('/');
+                            const coperturaHeader = document.querySelector('.copertura');
+                            coperturaHeader.innerHTML = `Copertura Open Fiber (Dati aggiornati al: ${updateDate})`;
                         }
                         var scalaCounter = 0;
                         var formattedCoordinates
@@ -1354,6 +1396,12 @@
                             totaleUi.innerHTML = `<span>TOTALE_UI:</span> ${item.TOTALE_UI}`;
                             risultatibox.appendChild(totaleUi);
 
+                            prevenData.forEach(item2 => {
+                                const delivery = document.createElement('p');
+                                delivery.innerHTML = `<span>EASY DELIVERY:</span> <span class="${item2.data.easy_delivery ? 'true' : 'false'}">${item2.data.easy_delivery ? 'Si' : 'No'}</span>`;
+                                risultatibox.appendChild(delivery);
+                            });
+
                             const xgsPon = document.createElement('p');
                             xgsPon.innerHTML = `<span>XGS-PON:</span> <span class="${item.tenGbpsSpeed ? 'yes' : 'no'}">${item.tenGbpsSpeed ? 'Si' : 'No'}</span>`;
 
@@ -1362,24 +1410,25 @@
                             }
                             risultatibox.appendChild(xgsPon);
 
-                            prevenData.forEach(item => {
-                                const delivery = document.createElement('p');
-                                delivery.innerHTML = `<span>EASY DELIVERY:</span> ${item.data.easy_delivery}`;
-                                risultatibox.appendChild(delivery);
-                            });
-
                             coperturaDiv.appendChild(risultatibox);
                             scalaCounter = scalaCounter + 1;
 
-                            var x = document.getElementById('statiOF');
-                            if (x.style.display === "block") {
-                                x.style.display = "none";
-                            } else {
-                                x.style.display = "block";
+                            if (item.clusterId === "A_B" || item.clusterId == "AGF") {
+                                var nomepop = item.POP;
+
+                                infopopdati(nomepop)
                             }
 
                         });
+                        var x = document.getElementById('statiOF');
+                        if (x.style.display === "block") {
+                            x.style.display = "none";
+                        } else {
+                            x.style.display = "block";
+                        }
                         geocodingof(formattedCoordinates,)
+
+
                     } else {
                         geocoding()
                         const coperturaDiv = document.getElementById('copertura-result');
@@ -1973,7 +2022,7 @@
                         ogg = item
                     } else {
                         atmData.forEach(item2 => {
-                             if (item2.status === "ATTIVO" || item2.status === "SATURO") {
+                            if (item2.status === "ATTIVO" || item2.status === "SATURO") {
                                 dati = atmData
                                 ogg = item2
                             } else {
@@ -2198,9 +2247,11 @@
 
             const mappaBUL = document.createElement('p');
             mappaBUL.innerHTML = `<a href="https://bandaultralarga.italia.it/mappa/?entity=${comuneId}" target="_blank" style="font-weight: bold;" class="lteitaly-link"><img class="icon-lteitaly" src="https://bandaultralarga.italia.it/wp-content/themes/accupress/assets/media/favicon.png">Mappa BUL</a>`;
-            mappaBUL.innerHTML += `<a href="https://connetti.italia.it/datasets/comuni/${comuneId}.csv" target="_blank" style="font-weight: bold;" class="lteitaly-link"><img class="icon-lteitaly" src="https://i.imgur.com/kkujNla.png">CSV Connetti</a>`;
             risultatibox.appendChild(mappaBUL);
 
+            const connettiCSV = document.createElement('p');
+            connettiCSV.innerHTML += `<a href="https://connetti.italia.it/datasets/comuni/${comuneId}.csv" target="_blank" style="font-weight: bold;" class="lteitaly-link"><img class="icon-lteitaly" src="https://i.imgur.com/kkujNla.png">CSV Connetti</a>`;
+            risultatibox.appendChild(connettiCSV);
 
             const consultazioniResponse = await fetch(`https://mappatura.amennillo.eu/egon?id=${civicoId}`);
             const consultazioniData = await consultazioniResponse.json();
@@ -2255,7 +2306,7 @@
                 risultatibox.className = 'risultatibox';
 
                 coordinate = document.createElement('p');
-                coordinate.innerHTML = `<b>Coordinate: </b><a href="https://www.google.com/maps/place/${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}">${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}</a>`;
+                coordinate.innerHTML = `<b>Coordinate: </b><a href="https://www.google.com/maps/place/${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}" target="_blank">${geoData.candidates[0].location.y}, ${geoData.candidates[0].location.x}</a>`;
                 risultatibox.appendChild(coordinate);
 
                 map.flyTo([geoData.candidates[0].location.y, geoData.candidates[0].location.x], 15);
@@ -2341,6 +2392,56 @@
                 console.log("ERRORE", TypeError)
             }
         }
+        async function infopopdati(nomepop) {
+
+            var campo = document.getElementById('pop');
+            if (campo.style.display === "none") {
+                campo.style.display = "block";
+            } else {
+                campo.style.display = "block";
+            }
+
+            const popResponse = await fetch(`https://coperturaapi.zeromist.net/pop?pop=${nomepop}`);
+            infopop = await popResponse.json();
+            console.log(infopop)
+
+            const infopopDiv = document.getElementById('pop_interno');
+            infopopDiv.innerHTML = '';
+
+            const risultatibox = document.createElement('div');
+            risultatibox.className = 'risultatibox';
+
+            const nomepp = document.createElement('p');
+            nomepp.innerHTML = `<span>NOME:</span> ${nomepop}`;
+            risultatibox.appendChild(nomepp);
+
+            infopopDiv.appendChild(risultatibox);
+            infopop.forEach(item => {
+                lat = item.lat.replace(",", ".")
+                lng = item.lng.replace(",", ".")
+
+                const indirizzopp = document.createElement('p');
+                indirizzopp.innerHTML = `<span>INDIRIZZO: </span><a href="https://www.google.com/maps/place/${lat}, ${lng}" target="_blank">${item.indirizzo} - ${item.comune}</a>`;
+                risultatibox.appendChild(indirizzopp);
+
+                const tipopp = document.createElement('p');
+                tipopp.innerHTML = `<span>TIPO PON:</span> <span class="${item.tipo_pon}">${item.tipo_pon}</span>`;
+                risultatibox.appendChild(tipopp);
+
+                infopopDiv.appendChild(risultatibox);
+            })
+
+        }
+        async function pop() {
+            var campo = document.getElementById('pop_interno');
+            console.log("click")
+            if (campo.style.display === "block") {
+                campo.style.display = "none";
+            } else {
+                campo.style.display = "block";
+            }
+        }
+
         var vicinanzedata
         async function vicinanzefc() {
             comunefc = document.getElementById("comune").value.split("(")[0].replace(" ", "")
