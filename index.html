@@ -405,6 +405,7 @@
             color: white;
             padding: 2px 5px;
         }
+
         .XGS-PON {
             background-color: green;
             color: white;
@@ -2411,17 +2412,17 @@
             const risultatibox = document.createElement('div');
             risultatibox.className = 'risultatibox';
 
-            const nomepp = document.createElement('p');
-            nomepp.innerHTML = `<span>NOME:</span> ${nomepop}`;
-            risultatibox.appendChild(nomepp);
-
             infopopDiv.appendChild(risultatibox);
             infopop.forEach(item => {
                 lat = item.lat.replace(",", ".")
                 lng = item.lng.replace(",", ".")
 
+                const nomepp = document.createElement('p');
+                nomepp.innerHTML = `<span>NOME:</span> <a href="https://www.google.com/maps/place/${lat}, ${lng}" target="_blank">${nomepop}</a>`;
+                risultatibox.appendChild(nomepp);
+
                 const indirizzopp = document.createElement('p');
-                indirizzopp.innerHTML = `<span>INDIRIZZO: </span><a href="https://www.google.com/maps/place/${lat}, ${lng}" target="_blank">${item.indirizzo} - ${item.comune}</a>`;
+                indirizzopp.innerHTML = `<span>INDIRIZZO: </span><a href="https://www.google.com/maps/place/${item.indirizzo}, ${item.comune}" target="_blank">${item.indirizzo} - ${item.comune}</a>`;
                 risultatibox.appendChild(indirizzopp);
 
                 const tipopp = document.createElement('p');
