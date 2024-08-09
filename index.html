@@ -2498,7 +2498,16 @@
                 risultatibox.appendChild(tipopp);
 
                 infopopDiv.appendChild(risultatibox);
+
+                var popicon = L.icon({
+                    iconUrl: "images/pop.png"
+                })
+                var pop_marker = L.marker([lat, lng], { icon: popicon }).addTo(map)
+                    .bindPopup(nomePOP + " - " + item.tipo_pon + " \n" + item.indirizzo + ", " + item.comune);
+                allMarkers.push(pop_marker);
             })
+
+
 
         }
         async function pop() {
