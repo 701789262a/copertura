@@ -2317,16 +2317,51 @@
                     console.log("nominatim", latok, lngok, precisionecivico)
                     tipogeocoding = "Nominatim OpenStreetMap"
                 } else {
-                        const arcgisrequest = await fetch(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=pjson&outFields=Addr_type&forStorage=false&SingleLine=${indirizzo_geo} ${civico_geo} ${comune_geo}`);
-                        const arcgisData = await arcgisrequest.json();
+                    const arcgisrequest = await fetch(`https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=pjson&outFields=Addr_type&forStorage=false&SingleLine=${indirizzo_geo} ${civico_geo} ${comune_geo}`);
+                    const arcgisData = await arcgisrequest.json();
+
+                    if (arcgisData.candidates[0].Addr_type === "PointAddress" || arcgisData.candidates[0].Addr_type === "Subaddress") {
                         latok = arcgisData.candidates[0].location.y
                         lngok = arcgisData.candidates[0].location.x
                         precisionecivico = arcgisData.candidates[0].attributes.Addr_type
                         tipogeocoding = "Esri"
                         console.log("arcgis", latok, lngok, precisionecivico)
-                        
-                }
+                    } else {
+                        const googlerequest = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${indirizzo_geo} ${civico_geo} ${comune_geo}&key=AIzaSyBUuDGQcuvj7tmrCZ3ZSVgxYn3ochO21YI`);
+                        const googleData = await googlerequest.json();
 
+                        if (googleData.results[0].geometry.location_type === "ROOFTOP") {
+                            latok = googleData.results[0].geometry.location.lat;
+                            lngok = googleData.results[0].geometry.location.lng;
+                            precisionecivico = googleData.results[0].geometry.location_type;
+                            tipogeocoding = "Google"
+                            console.log("google", latok, lngok, precisionecivico)
+                        }
+                        else {
+                            if (nominatimData[0].addresstype === "road") {
+                                latok = nominatimData[0].lat
+                                lngok = nominatimData[0].lon
+                                precisionecivico = nominatimData[0].addresstype
+                                console.log("nominatim", latok, lngok, precisionecivico)
+                                tipogeocoding = "Nominatim OpenStreetMap"
+                            } else {
+                                if (arcgisData.candidates[0].Addr_type === "StreetAddress" || arcgisData.candidates[0].Addr_type === "StreetAddressExt" || arcgisData.candidates[0].Addr_type === "StreetInt") {
+                                    latok = arcgisData.candidates[0].location.y
+                                    lngok = arcgisData.candidates[0].location.x
+                                    precisionecivico = arcgisData.candidates[0].attributes.Addr_type
+                                    tipogeocoding = "Esri"
+                                    console.log("arcgis", latok, lngok, precisionecivico)
+                                } else {
+                                    latok = googleData.results[0].geometry.location.lat;
+                                    lngok = googleData.results[0].geometry.location.lng;
+                                    precisionecivico = googleData.results[0].geometry.location_type;
+                                    tipogeocoding = "Google"
+                                    console.log("google", latok, lngok, precisionecivico)
+                                }
+                            }
+                        }
+                    }
+                }
 
 
                 const geocodeDiv = document.getElementById('geocode-result');
